@@ -113,23 +113,19 @@ def Leadership(df_pol, dfL1Best, dfL2Best, dfL3Best, dfL4Best):
   return leadershipResults, completeness
 
 def Preparedness (df_pol, dfP1Best, dfP2Best):
-    print('test')
-    preparednessResults = preparednessCompleteness = 0
+    preparednessResults = preparednessCompleteness = 14
     return preparednessResults, preparednessCompleteness
 
 def Infra (df_pol, dfI1Best, dfI2Best):
-    print('test')
-    infraResults = infraCompleteness = 0
+    infraResults = infraCompleteness = 16
     return infraResults, infraCompleteness
 
 def Cooperation (df_pol, dfC1Best, dfC2Best):
-    print('test')
-    cooperationResults = cooperationCompleteness = 0
+    cooperationResults = cooperationCompleteness = 13
     return cooperationResults, cooperationCompleteness
 
 def Urban (df_pol, dfU1Best, dfE1Best):
-    print('test')
-    urbanResults = urbanCompleteness = 0
+    urbanResults = urbanCompleteness = 10
     return urbanResults, urbanCompleteness
       
 # GAUGE GRAPHS
@@ -164,8 +160,8 @@ def gauge_graphs (completeness, text, reference):
                 starting = [0, 5]#4
                 moderate = [5, 10]#10
                 advanced = [10, 15]#17
-                robust = [20, 25]#21
-                vertebrate = [25, 30]#22
+                robust = [15, 20]#21
+                vertebrate = [20, 25]#22
             case _:
                 print("error")
     fig = go.Figure(go.Indicator(
@@ -309,235 +305,235 @@ reference = 25#22
 fig5 = gauge_graphs(completenessUrban, text, reference)
 sec5_col5.plotly_chart(fig5, use_container_width=True)
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(['Leadership & Governance', 'Preparedness', 'Cooperation','Infrastructure & Resources', 'Urban Development & Environmental'])
+# tab1, tab2, tab3, tab4, tab5 = st.tabs(['Leadership & Governance', 'Preparedness', 'Cooperation','Infrastructure & Resources', 'Urban Development & Environmental'])
 
-with tab1:
+# with tab1:
     ##
     # RADAR GRAPHS
     ##
-    with st.expander('Questions Performance Analysis', expanded=True):
-        st.subheader('Questions Performance Analysis')
-        
-        col1, col2 = st.columns([1,1])
-        # RADAR L1
-        categories = ['Resilience<br>Governance', 'Plans<br>Integration', 'Access to<br>Basic Services', 'Support to<br>other cities']
-        best = [4, 5, 3, 4]
-        mean = [df['L1Q1'].mean(),df['L1Q2'].mean(),df['L1Q3'].mean(),df['L1Q4'].mean()]
-        text='Leadership & Governance (L1)'
-        fig1 = radar_graphs(categories, best, mean, text)
-        col1.plotly_chart(fig1, use_container_width=True)
+with st.expander('Questions Performance Analysis', expanded=True):
+    st.subheader('Questions Performance Analysis - Leadership & Governance')
+    
+    col1, col2 = st.columns([1,1])
+    # RADAR L1
+    categories = ['Resilience<br>Governance', 'Plans<br>Integration', 'Access to<br>Basic Services', 'Support to<br>other cities']
+    best = [4, 5, 3, 4]
+    mean = [df['L1Q1'].mean(),df['L1Q2'].mean(),df['L1Q3'].mean(),df['L1Q4'].mean()]
+    text='Leadership & Governance (L1)'
+    fig1 = radar_graphs(categories, best, mean, text)
+    col1.plotly_chart(fig1, use_container_width=True)
 
-        # RADAR L2
-        categories = ['Standards<br>Alignment', 'Certification<br>Processes', 'Risk Reduction and<br>Prevention Policies']
-        best = [5, 5, 4]
-        mean = [df['L2Q1'].mean(), df['L2Q2'].mean(), df['L2Q3'].mean()]
-        text='Leadership & Governance (L2)'
-        fig2 = radar_graphs(categories, best, mean, text)
-        col2.plotly_chart(fig2, use_container_width=True)
+    # RADAR L2
+    categories = ['Standards<br>Alignment', 'Certification<br>Processes', 'Risk Reduction and<br>Prevention Policies']
+    best = [5, 5, 4]
+    mean = [df['L2Q1'].mean(), df['L2Q2'].mean(), df['L2Q3'].mean()]
+    text='Leadership & Governance (L2)'
+    fig2 = radar_graphs(categories, best, mean, text)
+    col2.plotly_chart(fig2, use_container_width=True)
 
-        col3, col4 = st.columns([1,1])
-        # RADAR L3
-        categories = ['Resilience<br>Culture', 'Lessons<br>Past Events', 'Knowledge<br>Transfer', 'Learning<br>Process', 'Learning Process<br>Assessment']
-        best = [3, 4, 5, 5, 3]
-        mean = [df['L3Q1'].mean(), df['L3Q2'].mean(), df['L3Q3'].mean(), df['L3Q4'].mean(), df['L3Q5'].mean()]
-        text='Leadership & Governance (L3)'
-        fig3 = radar_graphs(categories, best, mean, text)
-        col3.plotly_chart(fig3, use_container_width=True)
+    col3, col4 = st.columns([1,1])
+    # RADAR L3
+    categories = ['Resilience<br>Culture', 'Lessons<br>Past Events', 'Knowledge<br>Transfer', 'Learning<br>Process', 'Learning Process<br>Assessment']
+    best = [3, 4, 5, 5, 3]
+    mean = [df['L3Q1'].mean(), df['L3Q2'].mean(), df['L3Q3'].mean(), df['L3Q4'].mean(), df['L3Q5'].mean()]
+    text='Leadership & Governance (L3)'
+    fig3 = radar_graphs(categories, best, mean, text)
+    col3.plotly_chart(fig3, use_container_width=True)
 
-        # RADAR L4
-        categories = ['Disaster Response<br>Plan', 'RAP Plan<br>Development', 'Stakeholders<br>Collaboration', 'Disaster<br>Focus', 'Climate Change<br>Perspective', 'Resilience Adoption<br>and Integration', 'Collaboration and Networking with<br>Cities and External Bodies']
-        best = [3, 5, 5, 3, 3, 4, 5]
-        mean = [df['L4Q1'].mean(), df['L4Q2'].mean(), df['L4Q3'].mean(), df['L4Q4'].mean(), df['L4Q5'].mean(), df['L4Q6'].mean(), df['L4Q7'].mean()]
-        text='Leadership & Governance (L4)'
-        fig4 = radar_graphs(categories, best, mean, text)
-        col4.plotly_chart(fig4, use_container_width=True)
+    # RADAR L4
+    categories = ['Disaster Response<br>Plan', 'RAP Plan<br>Development', 'Stakeholders<br>Collaboration', 'Disaster<br>Focus', 'Climate Change<br>Perspective', 'Resilience Adoption<br>and Integration', 'Collaboration and Networking with<br>Cities and External Bodies']
+    best = [3, 5, 5, 3, 3, 4, 5]
+    mean = [df['L4Q1'].mean(), df['L4Q2'].mean(), df['L4Q3'].mean(), df['L4Q4'].mean(), df['L4Q5'].mean(), df['L4Q6'].mean(), df['L4Q7'].mean()]
+    text='Leadership & Governance (L4)'
+    fig4 = radar_graphs(categories, best, mean, text)
+    col4.plotly_chart(fig4, use_container_width=True)
 
-    ##
-    # Policies
-    ##
-    with st.expander('Completeness', expanded=True):
-        st.subheader('Completeness')
+##
+# Policies
+##
+with st.expander('Completeness', expanded=True):
+    st.subheader('Completeness - Leadership & Governance')
 
-        linegraphView = st.selectbox('Select the view',
-        ('Policies Completeness','SMART Completeness (Each subdimension)','SMART Completeness (All subdimensions)'))
+    linegraphView = st.selectbox('Select the view',
+    ('Policies Completeness','SMART Completeness (Each subdimension)','SMART Completeness (All subdimensions)'))
 
-        if linegraphView == 'Policies Completeness':
-            sec4_col1,sec4_col2 = st.columns([1,1])
-            ## LINE GRAPH L1
-            dimension = ['L1S1','L1S2','L1M1','L1M2','L1M3','L1A1','L1A2','L1R2','L1T2']
-            valueBestDimension = [1,1,1,1,1,1,1,1,1]
-            valueCapturedCompleteness = [leadershipResults['L1S1'][0], leadershipResults['L1S2'][0], 
-                                        leadershipResults['L1M1'][0], leadershipResults['L1M2'][0], leadershipResults['L1M3'][0], 
-                                        leadershipResults['L1A1'][0], leadershipResults['L1A2'][0], 
-                                        leadershipResults['L1R2'][0], leadershipResults['L1T2'][0]]
-            title = 'All Policies - L1'
-            fig1 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
-            sec4_col1.plotly_chart(fig1, use_container_width=True)
+    if linegraphView == 'Policies Completeness':
+        sec4_col1,sec4_col2 = st.columns([1,1])
+        ## LINE GRAPH L1
+        dimension = ['L1S1','L1S2','L1M1','L1M2','L1M3','L1A1','L1A2','L1R2','L1T2']
+        valueBestDimension = [1,1,1,1,1,1,1,1,1]
+        valueCapturedCompleteness = [leadershipResults['L1S1'][0], leadershipResults['L1S2'][0], 
+                                    leadershipResults['L1M1'][0], leadershipResults['L1M2'][0], leadershipResults['L1M3'][0], 
+                                    leadershipResults['L1A1'][0], leadershipResults['L1A2'][0], 
+                                    leadershipResults['L1R2'][0], leadershipResults['L1T2'][0]]
+        title = 'All Policies - L1'
+        fig1 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
+        sec4_col1.plotly_chart(fig1, use_container_width=True)
 
-            ## LINE GRAPH L2
-            dimension = ['L2M1','L2A1','L2R1','L2T1']
-            valueBestDimension = [1,1,1,1]
-            valueCapturedCompleteness = [leadershipResults['L2M1'][0], leadershipResults['L2A1'][0], leadershipResults['L2R1'][0], leadershipResults['L2T1'][0]]
-            title = 'All Policies - L2'
-            fig2 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
-            sec4_col2.plotly_chart(fig2, use_container_width=True)
+        ## LINE GRAPH L2
+        dimension = ['L2M1','L2A1','L2R1','L2T1']
+        valueBestDimension = [1,1,1,1]
+        valueCapturedCompleteness = [leadershipResults['L2M1'][0], leadershipResults['L2A1'][0], leadershipResults['L2R1'][0], leadershipResults['L2T1'][0]]
+        title = 'All Policies - L2'
+        fig2 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
+        sec4_col2.plotly_chart(fig2, use_container_width=True)
 
-            sec4_col3, sec4_col4 = st.columns([1,1])
-            ## LINE GRAPH L3
-            dimension = ['L3S1','L3M1','L3M2','L3A2','L3R2','L3T1','L3T2']
-            valueBestDimension = [1,1,1,1,1,1,1]
-            valueCapturedCompleteness = [leadershipResults['L3S1'][0],
-                                        leadershipResults['L3M1'][0], leadershipResults['L3M2'][0],
-                                        leadershipResults['L3A2'][0],
-                                        leadershipResults['L3R2'][0],
-                                        leadershipResults['L3T1'][0], leadershipResults['L3T2'][0]]
-            title = 'All Policies - L3'
-            fig3 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
-            sec4_col3.plotly_chart(fig3, use_container_width=True)
+        sec4_col3, sec4_col4 = st.columns([1,1])
+        ## LINE GRAPH L3
+        dimension = ['L3S1','L3M1','L3M2','L3A2','L3R2','L3T1','L3T2']
+        valueBestDimension = [1,1,1,1,1,1,1]
+        valueCapturedCompleteness = [leadershipResults['L3S1'][0],
+                                    leadershipResults['L3M1'][0], leadershipResults['L3M2'][0],
+                                    leadershipResults['L3A2'][0],
+                                    leadershipResults['L3R2'][0],
+                                    leadershipResults['L3T1'][0], leadershipResults['L3T2'][0]]
+        title = 'All Policies - L3'
+        fig3 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
+        sec4_col3.plotly_chart(fig3, use_container_width=True)
 
-            # LINE GRAPH L4
-            dimension = ['L4S1','L4S2','L4M2','L4M3','L4A1','L4A2','L4A4','L4R2','L4T3']
-            valueBestDimension = [1,1,1,1,1,1,1,1,1]
-            valueCapturedCompleteness = [leadershipResults['L4S1'][0], leadershipResults['L4S2'][0],
-                                        leadershipResults['L4M2'][0], leadershipResults['L4M3'][0],
-                                        leadershipResults['L4A1'][0], leadershipResults['L4A2'][0], leadershipResults['L4A4'][0],
-                                        leadershipResults['L4R2'][0],
-                                        leadershipResults['L4T3'][0], ]
-            title = 'All Policies - L4'
-            fig4 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
-            sec4_col4.plotly_chart(fig4, use_container_width=True)
-        
-        #
-        ## SMART Completeness (Each subdimension)
-        #
-        elif linegraphView == 'SMART Completeness (Each subdimension)':
-            sec4_col1,sec4_col2 = st.columns([1,1])
-            ## LINE GRAPH L1
-            dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
-            valueBestDimension = [1,1,1,1,1]
-            valueCapturedCompleteness = [(leadershipResults['L1S1'][0] + leadershipResults['L1S2'][0])/2, 
-                                        (leadershipResults['L1M1'][0] + leadershipResults['L1M2'][0] + leadershipResults['L1M3'][0])/3, 
-                                        (leadershipResults['L1A1'][0] + leadershipResults['L1A2'][0])/2, 
-                                        (leadershipResults['L1R2'][0] + leadershipResults['L1T2'][0])/2]
-            title = 'All Policies - L1'
-            fig1 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
-            sec4_col1.plotly_chart(fig1, use_container_width=True)
+        # LINE GRAPH L4
+        dimension = ['L4S1','L4S2','L4M2','L4M3','L4A1','L4A2','L4A4','L4R2','L4T3']
+        valueBestDimension = [1,1,1,1,1,1,1,1,1]
+        valueCapturedCompleteness = [leadershipResults['L4S1'][0], leadershipResults['L4S2'][0],
+                                    leadershipResults['L4M2'][0], leadershipResults['L4M3'][0],
+                                    leadershipResults['L4A1'][0], leadershipResults['L4A2'][0], leadershipResults['L4A4'][0],
+                                    leadershipResults['L4R2'][0],
+                                    leadershipResults['L4T3'][0], ]
+        title = 'All Policies - L4'
+        fig4 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
+        sec4_col4.plotly_chart(fig4, use_container_width=True)
+    
+    #
+    ## SMART Completeness (Each subdimension)
+    #
+    elif linegraphView == 'SMART Completeness (Each subdimension)':
+        sec4_col1,sec4_col2 = st.columns([1,1])
+        ## LINE GRAPH L1
+        dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
+        valueBestDimension = [1,1,1,1,1]
+        valueCapturedCompleteness = [(leadershipResults['L1S1'][0] + leadershipResults['L1S2'][0])/2, 
+                                    (leadershipResults['L1M1'][0] + leadershipResults['L1M2'][0] + leadershipResults['L1M3'][0])/3, 
+                                    (leadershipResults['L1A1'][0] + leadershipResults['L1A2'][0])/2, 
+                                    (leadershipResults['L1R2'][0] + leadershipResults['L1T2'][0])/2]
+        title = 'All Policies - L1'
+        fig1 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
+        sec4_col1.plotly_chart(fig1, use_container_width=True)
 
-            ## LINE GRAPH L2
-            dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
-            valueBestDimension = [1,1,1,1,1]
-            valueCapturedCompleteness = [leadershipResults['L2M1'][0], leadershipResults['L2A1'][0], leadershipResults['L2R1'][0], leadershipResults['L2T1'][0]]
-            title = 'All Policies - L2'
-            fig2 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
-            sec4_col2.plotly_chart(fig2, use_container_width=True)
+        ## LINE GRAPH L2
+        dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
+        valueBestDimension = [1,1,1,1,1]
+        valueCapturedCompleteness = [leadershipResults['L2M1'][0], leadershipResults['L2A1'][0], leadershipResults['L2R1'][0], leadershipResults['L2T1'][0]]
+        title = 'All Policies - L2'
+        fig2 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
+        sec4_col2.plotly_chart(fig2, use_container_width=True)
 
-            sec4_col3, sec4_col4 = st.columns([1,1])
-            ## LINE GRAPH L3
-            dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
-            valueBestDimension = [1,1,1,1,1]
-            valueCapturedCompleteness = [leadershipResults['L3S1'][0],
-                                        (leadershipResults['L3M1'][0] + leadershipResults['L3M2'][0])/2,
-                                        leadershipResults['L3A2'][0],
-                                        leadershipResults['L3R2'][0],
-                                        (leadershipResults['L3T1'][0] + leadershipResults['L3T2'][0])/2]
-            title = 'All Policies - L3'
-            fig3 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
-            sec4_col3.plotly_chart(fig3, use_container_width=True)
+        sec4_col3, sec4_col4 = st.columns([1,1])
+        ## LINE GRAPH L3
+        dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
+        valueBestDimension = [1,1,1,1,1]
+        valueCapturedCompleteness = [leadershipResults['L3S1'][0],
+                                    (leadershipResults['L3M1'][0] + leadershipResults['L3M2'][0])/2,
+                                    leadershipResults['L3A2'][0],
+                                    leadershipResults['L3R2'][0],
+                                    (leadershipResults['L3T1'][0] + leadershipResults['L3T2'][0])/2]
+        title = 'All Policies - L3'
+        fig3 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
+        sec4_col3.plotly_chart(fig3, use_container_width=True)
 
-            # LINE GRAPH L4
-            dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
-            valueBestDimension = [1,1,1,1,1]
-            valueCapturedCompleteness = [(leadershipResults['L4S1'][0] + leadershipResults['L4S2'][0])/2,
-                                        (leadershipResults['L4M2'][0] + leadershipResults['L4M3'][0])/2,
-                                        (leadershipResults['L4A1'][0] + leadershipResults['L4A2'][0] + leadershipResults['L4A4'][0])/3,
-                                        leadershipResults['L4R2'][0],
-                                        leadershipResults['L4T3'][0], ]
-            title = 'All Policies - L4'
-            fig4 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
-            sec4_col4.plotly_chart(fig4, use_container_width=True)
-        
-        elif linegraphView == 'SMART Completeness (All subdimensions)':
-            dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
-            valueBestDimension = [1,1,1,1,1]
-            valueCapturedCompleteness = [(leadershipResults['L1S1'][0] + leadershipResults['L1S2'][0] + leadershipResults['L3S1'][0] + leadershipResults['L4S1'][0] + leadershipResults['L4S2'][0])/5,
-                                        (leadershipResults['L1M1'][0] + leadershipResults['L1M2'][0] + leadershipResults['L1M3'][0] + leadershipResults['L2M1'][0] + leadershipResults['L3M1'][0] + leadershipResults['L3M2'][0] + leadershipResults['L4M2'][0] + leadershipResults['L4M3'][0])/8,
-                                        (leadershipResults['L1A1'][0] + leadershipResults['L1A2'][0] + leadershipResults['L2A1'][0] + leadershipResults['L3A2'][0] + leadershipResults['L4A1'][0] + leadershipResults['L4A2'][0] + leadershipResults['L4A4'][0])/7,
-                                        (leadershipResults['L1R2'][0] + leadershipResults['L2R1'][0] + leadershipResults['L3R2'][0] + leadershipResults['L4R2'][0])/4,
-                                        (leadershipResults['L1T2'][0] + leadershipResults['L2T1'][0] + leadershipResults['L3T1'][0] + leadershipResults['L3T2'][0] + leadershipResults['L4T3'][0])/5]
-            title = 'All Policies'
-            fig1 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
-            st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+        # LINE GRAPH L4
+        dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
+        valueBestDimension = [1,1,1,1,1]
+        valueCapturedCompleteness = [(leadershipResults['L4S1'][0] + leadershipResults['L4S2'][0])/2,
+                                    (leadershipResults['L4M2'][0] + leadershipResults['L4M3'][0])/2,
+                                    (leadershipResults['L4A1'][0] + leadershipResults['L4A2'][0] + leadershipResults['L4A4'][0])/3,
+                                    leadershipResults['L4R2'][0],
+                                    leadershipResults['L4T3'][0], ]
+        title = 'All Policies - L4'
+        fig4 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
+        sec4_col4.plotly_chart(fig4, use_container_width=True)
+    
+    elif linegraphView == 'SMART Completeness (All subdimensions)':
+        dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
+        valueBestDimension = [1,1,1,1,1]
+        valueCapturedCompleteness = [(leadershipResults['L1S1'][0] + leadershipResults['L1S2'][0] + leadershipResults['L3S1'][0] + leadershipResults['L4S1'][0] + leadershipResults['L4S2'][0])/5,
+                                    (leadershipResults['L1M1'][0] + leadershipResults['L1M2'][0] + leadershipResults['L1M3'][0] + leadershipResults['L2M1'][0] + leadershipResults['L3M1'][0] + leadershipResults['L3M2'][0] + leadershipResults['L4M2'][0] + leadershipResults['L4M3'][0])/8,
+                                    (leadershipResults['L1A1'][0] + leadershipResults['L1A2'][0] + leadershipResults['L2A1'][0] + leadershipResults['L3A2'][0] + leadershipResults['L4A1'][0] + leadershipResults['L4A2'][0] + leadershipResults['L4A4'][0])/7,
+                                    (leadershipResults['L1R2'][0] + leadershipResults['L2R1'][0] + leadershipResults['L3R2'][0] + leadershipResults['L4R2'][0])/4,
+                                    (leadershipResults['L1T2'][0] + leadershipResults['L2T1'][0] + leadershipResults['L3T1'][0] + leadershipResults['L3T2'][0] + leadershipResults['L4T3'][0])/5]
+        title = 'All Policies'
+        fig1 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
+        st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
-            improve_dimension = 0
+        improve_dimension = 0
+        dimension_value = 0
+
+        if valueCapturedCompleteness[0] < 1:
+            improve_dimension = "S"
             dimension_value = 0
+        elif valueCapturedCompleteness[1] < 1:
+            improve_dimension = "M"
+            dimension_value = 1
+        elif valueCapturedCompleteness[2] < 1:
+            improve_dimension = "A"
+            dimension_value = 2
+        elif valueCapturedCompleteness[3] < 1:
+            improve_dimension = "R"
+            dimension_value = 3
+        elif valueCapturedCompleteness[4] < 1:
+            improve_dimension = "T"
+            dimension_value = 4
 
-            if valueCapturedCompleteness[0] < 1:
-                improve_dimension = "S"
-                dimension_value = 0
-            elif valueCapturedCompleteness[1] < 1:
-                improve_dimension = "M"
-                dimension_value = 1
-            elif valueCapturedCompleteness[2] < 1:
-                improve_dimension = "A"
-                dimension_value = 2
-            elif valueCapturedCompleteness[3] < 1:
-                improve_dimension = "R"
-                dimension_value = 3
-            elif valueCapturedCompleteness[4] < 1:
-                improve_dimension = "T"
-                dimension_value = 4
-
-            if valueCapturedCompleteness[dimension_value]<1:
+        if valueCapturedCompleteness[dimension_value]<1:
 
 
 
 
-                st.subheader("Recommendations")
-                st.markdown(f'''##### ➜ Policies to be prioritised to achieve {dimension[dimension_value]} maximum level''', unsafe_allow_html=True)
-                # st.markdown("**➜ Policies to be prioritised to achieve **" + dimension[dimension_value] + "** maximum level**")
-                # st.write(leadershipResults['L1S1'][0])
-                for key, value in leadershipResults.items():
-                    if improve_dimension in key:
-                        if leadershipResults[key][0] < 1:
-                            st.write("🔴" + key + " - " + leadershipPoliciesText[key][0])
-                            # st.write(key)
-                st.markdown(f'''##### ➜ Additional policies to achieve {dimension[dimension_value+1]} maximum level''', unsafe_allow_html=True)
-                # st.write("**➜ Additional policies to achieve **" + dimension[dimension_value+1] + "** maximum level**")
-                for key, value in leadershipResults.items():
-                    if "M" in key:
-                        if leadershipResults[key][0] < 1:
-                            # st.write(key)
-                            st.write("🟠" + key + " - " + leadershipPoliciesText[key][0])
+            st.subheader("Recommendations")
+            st.markdown(f'''##### ➜ Policies to be prioritised to achieve {dimension[dimension_value]} maximum level''', unsafe_allow_html=True)
+            # st.markdown("**➜ Policies to be prioritised to achieve **" + dimension[dimension_value] + "** maximum level**")
+            # st.write(leadershipResults['L1S1'][0])
+            for key, value in leadershipResults.items():
+                if improve_dimension in key:
+                    if leadershipResults[key][0] < 1:
+                        st.write("🔴" + key + " - " + leadershipPoliciesText[key][0])
+                        # st.write(key)
+            st.markdown(f'''##### ➜ Additional policies to achieve {dimension[dimension_value+1]} maximum level''', unsafe_allow_html=True)
+            # st.write("**➜ Additional policies to achieve **" + dimension[dimension_value+1] + "** maximum level**")
+            for key, value in leadershipResults.items():
+                if "M" in key:
+                    if leadershipResults[key][0] < 1:
+                        # st.write(key)
+                        st.write("🟠" + key + " - " + leadershipPoliciesText[key][0])
 
-    ##
-    # Overview of Policies by years
-    ##
-    with st.expander("SMR Completeness", expanded=True):
-        st.subheader("Cities and SMR Completeness")
+##
+# Overview of Policies by years
+##
+with st.expander("SMR Completeness", expanded=True):
+    st.subheader("Cities and SMR Completeness - Leadership & Governance")
 
-        x = [
-            ["2022", "2022", "2022",
-            "2023", "2023", "2023"],
-            ["Donostia - Synthetic data", "Bilbao - Synthetic data", "Pamplona - Synthetic data",
-            "Donostia", " Bilbao - Synthetic data", "  Pamplona - Synthetic data"]
-        ]
-        fig = go.Figure()
-        fig.add_trace(go.Bar(x=x, y=[3, 4, 3, leadershipCompleteness[0], 5, 4], name='Starting', marker_color = "#ef476f"))
-        fig.add_trace(go.Bar(x=x, y=[1, 3, 2, leadershipCompleteness[1], 4, 3], name='Robust', marker_color = "#ffd166"))
-        fig.add_trace(go.Bar(x=x, y=[0, 2, 1, leadershipCompleteness[2], 3, 2], name='Advanced', marker_color = "#06d6a0"))
-        fig.add_trace(go.Bar(x=x, y=[0, 1, 0, leadershipCompleteness[3], 2, 1], name='Moderate', marker_color = "#118ab2"))
-        fig.add_trace(go.Bar(x=x, y=[0, 0, 0, leadershipCompleteness[4], 1, 0], name='Vertebrate', marker_color = "#073b4c"))
-        fig.update_layout(barmode="relative")
-        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+    x = [
+        ["2022", "2022", "2022",
+        "2023", "2023", "2023"],
+        ["Donostia - Synthetic data", "Bilbao - Synthetic data", "Pamplona - Synthetic data",
+        "Donostia", " Bilbao - Synthetic data", "  Pamplona - Synthetic data"]
+    ]
+    fig = go.Figure()
+    fig.add_trace(go.Bar(x=x, y=[3, 4, 3, leadershipCompleteness[0], 5, 4], name='Starting', marker_color = "#ef476f"))
+    fig.add_trace(go.Bar(x=x, y=[1, 3, 2, leadershipCompleteness[1], 4, 3], name='Robust', marker_color = "#ffd166"))
+    fig.add_trace(go.Bar(x=x, y=[0, 2, 1, leadershipCompleteness[2], 3, 2], name='Advanced', marker_color = "#06d6a0"))
+    fig.add_trace(go.Bar(x=x, y=[0, 1, 0, leadershipCompleteness[3], 2, 1], name='Moderate', marker_color = "#118ab2"))
+    fig.add_trace(go.Bar(x=x, y=[0, 0, 0, leadershipCompleteness[4], 1, 0], name='Vertebrate', marker_color = "#073b4c"))
+    fig.update_layout(barmode="relative")
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
-with tab2:
-    st.write('Test')
+# with tab2:
+#     st.write('Test')
 
-with tab3:
-    st.write('Test')
+# with tab3:
+#     st.write('Test')
 
-with tab4:
-    st.write('Test')
+# with tab4:
+#     st.write('Test')
 
-with tab5:
-    st.write('Test')
+# with tab5:
+#     st.write('Test')
