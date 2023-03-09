@@ -23,6 +23,37 @@ dfC2Best = [4,4,4,4,4,4,4,5]
 dfU1Best = [3,3,3,3,3,4,4,4,3,3,3,3]
 dfE1Best = [4,3,3,4,4,3,3,3,3,3,3,3,3]
 
+leadershipPoliciesText = ({'L1S1': ['Establish a working team responsible for resilience issues in the city'], 
+                    'L1M1': ['Establish a single point of coordination in the city (i.e. resilience department or committee) that facilitates cross-departmental coordination board and procedures'], 
+                    'L1A1': ['Implement the multi-level governance approach to establish an organisational structure with strong leadership and clarity of coordination between municipal, regional and national levels of governance'], 
+                    'L1S2': ['Integrate resilience into visions, policies and strategies for city development plans'], 
+                    'L1M2': ['Align, integrate and connect the resilience action plan with regional plans'], 
+                    'L1A2': ['Align, integrate and connect the resilience action plan with national plans'], 
+                    'L1R2': ['Align, integrate and connect the city resilience plan with regional, national and international resilience management guidelines'], 
+                    'L1T2': ['Support the development of other city resilience plans aligned, integrated and connected with regional, national and international resilience management guidelines'], 
+                    'L1M3': ['Promote equality of access to services and basic infrastructure to vulnerable sectors of society'],
+                    'L2M1': ['Integrate resilience approach into existing risk reduction and prevention policies by establishing new strategies, acts, laws and codes'], 
+                    'L2A1': ['Conduct certification processes to achieve the conformity with national standards'], 
+                    'L2R1': ['Conduct certification processes to achieve the conformity with international standards'], 
+                    'L2T1': ['Contribute to the development of standards on resilience guidelines and policies'],
+                    'L3S1': ['Develop a strategy to create a resilience culture'], 
+                    'L3M1': ['Promote a culture of resilience among citizens, institutions and organisations by investing and promoting social and institutional cohesion'], 
+                    'L3T1': ['Promote leadership for knowledge transferring and sharing among global cities, regions and nations'], 
+                    'L3M2': ['Review existing strategies, practices, and actions to capture lessons from past events'], 
+                    'L3A2': ['Formalize the learning process and institutionalise regular debriefing meetings'], 
+                    'L3R2': ['Create a ´Learning City` by establishing active networks of stakeholders to exchange lessons learned and knowledge'], 
+                    'L3T2': ['Develop formal procedures to assess the effectiveness of the learning process'],
+                    'L4S1': ['Identify the requirements needed to boost the process of integrating the resilience approach into development policies'], 
+                    'L4A1': ['Properly integrate the resilience strategy with other key city functions (planning, sustainability, emergency management, infrastructure management)'], 
+                    'L4S2': ['Develop disaster management, response and recovery plan '], 
+                    'L4M2': ['Develop a resilience action plan to respond to shocks and long-term stresses by taking as a starting point those city elements and resources already available'], 
+                    'L4A2': ['Develop leading indicators for assessing the performance of the resilience action plan'], 
+                    'L4R2': ['Perform periodic monitoring and assessment of the resilience action plan effectiveness to continuously update and improve the plan with new data and planning strategies'], 
+                    'L4M3': ['Adopt a bottom-up approach that facilitates transparent and inclusive participatory and multi-stakeholder consultation processes to develop resilience planning, policies and strategies'], 
+                    'L4T3': ["Share the CITY's expertise in resilience action plan development with other cities about to start the process"], 
+                    'L4A4': ['Integrate climate change perspective in developing the resilience action plan by incorporating climate risk information at every phase of policy planning']})
+
+
 df = pd.read_csv('Demo SMR Self-Assessment Tool.csv', sep=';')
 
 def Leadership(df_pol, dfL1Best, dfL2Best, dfL3Best, dfL4Best):
@@ -106,35 +137,35 @@ def Urban (df_pol, dfU1Best, dfE1Best):
 def gauge_graphs (completeness, text, reference):
     match text:
             case "Leadership & Governance":
-                starting = [0, 5]
-                moderate = [5, 13]
-                advanced = [13, 20]
-                robust = [20, 24]
-                vertebrate = [24, 29]
+                starting = [0, 5] #5
+                moderate = [5, 10] # 13
+                advanced = [10, 15] # 20
+                robust = [15, 20] # 24
+                vertebrate = [20, 25] # 29
             case "Preparedness":
-                starting = [0, 6]
-                moderate = [6, 10]
-                advanced = [10, 17]
-                robust = [17, 20]
-                vertebrate = [20, 23]
+                starting = [0, 5] # 6
+                moderate = [5, 10]#10
+                advanced = [10, 15]#17
+                robust = [15, 20]#20
+                vertebrate = [20, 25]#23
             case "Infrastructure & Resources":
-                starting = [0, 6]
-                moderate = [6, 14]
-                advanced = [14, 21]
-                robust = [21, 24]
-                vertebrate = [24, 28]
+                starting = [0, 5]#6
+                moderate = [5, 10]#14
+                advanced = [10, 15]#21
+                robust = [15, 20]#24
+                vertebrate = [20, 25]#28
             case "Cooperation":
-                starting = [0, 2]
-                moderate = [2, 7]
-                advanced = [7, 13]
-                robust = [13, 17]
-                vertebrate = [17, 21]
+                starting = [0, 5]#2
+                moderate = [5, 10]#7
+                advanced = [10, 15]#13
+                robust = [15, 20]#17
+                vertebrate = [20, 25]#21
             case "Urban Development <br>& Environmental":
-                starting = [0, 4]
-                moderate = [4, 10]
-                advanced = [10, 17]
-                robust = [17, 21]
-                vertebrate = [21, 22]
+                starting = [0, 5]#4
+                moderate = [5, 10]#10
+                advanced = [10, 15]#17
+                robust = [20, 25]#21
+                vertebrate = [25, 30]#22
             case _:
                 print("error")
     fig = go.Figure(go.Indicator(
@@ -246,35 +277,35 @@ sec5_col1, sec5_col2, sec5_col3, sec5_col4, sec5_col5 = st.columns([1,1,1,1,1])
 #Gauge 1 - Leadership & Governance
 completenessLeadership = sum(leadershipCompleteness)
 text = 'Leadership & Governance'
-reference = 29
+reference = 25#29
 fig1 = gauge_graphs(completenessLeadership, text, reference)
 sec5_col1.plotly_chart(fig1, use_container_width=True)
 
 #Gauge 2 - Preparedness
 completenessPreparedness = preparednessCompleteness
 text = 'Preparedness'
-reference = 23
+reference = 25#23
 fig2 = gauge_graphs(completenessPreparedness, text, reference)
 sec5_col2.plotly_chart(fig2, use_container_width=True)
 
 #Gauge 3 - Infrastructure & Resources
 completenessInfra = infraCompleteness
 text = 'Infrastructure & Resources'
-reference = 28
+reference = 25#28
 fig3 = gauge_graphs(completenessInfra, text, reference)
 sec5_col3.plotly_chart(fig3, use_container_width=True)
 
 #Gauge 4 - Cooperation
 completenessCooperation = cooperationCompleteness
 text = 'Cooperation'
-reference = 21
+reference = 25#21
 fig4 = gauge_graphs(completenessCooperation, text, reference)
 sec5_col4.plotly_chart(fig4, use_container_width=True)
 
 #Gauge 5 - Urban Development & Environmental
 completenessUrban = urbanCompleteness
 text = 'Urban Development <br>& Environmental'
-reference = 22
+reference = 25#22
 fig5 = gauge_graphs(completenessUrban, text, reference)
 sec5_col5.plotly_chart(fig5, use_container_width=True)
 
@@ -436,6 +467,47 @@ with tab1:
             title = 'All Policies'
             fig1 = line_graphs(dimension, valueBestDimension, valueCapturedCompleteness, title)
             st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
+            improve_dimension = 0
+            dimension_value = 0
+
+            if valueCapturedCompleteness[0] < 1:
+                improve_dimension = "S"
+                dimension_value = 0
+            elif valueCapturedCompleteness[1] < 1:
+                improve_dimension = "M"
+                dimension_value = 1
+            elif valueCapturedCompleteness[2] < 1:
+                improve_dimension = "A"
+                dimension_value = 2
+            elif valueCapturedCompleteness[3] < 1:
+                improve_dimension = "R"
+                dimension_value = 3
+            elif valueCapturedCompleteness[4] < 1:
+                improve_dimension = "T"
+                dimension_value = 4
+
+            if valueCapturedCompleteness[dimension_value]<1:
+
+
+
+
+                st.subheader("Recommendations")
+                st.markdown(f'''##### ➜ Policies to be prioritised to achieve {dimension[dimension_value]} maximum level''', unsafe_allow_html=True)
+                # st.markdown("**➜ Policies to be prioritised to achieve **" + dimension[dimension_value] + "** maximum level**")
+                # st.write(leadershipResults['L1S1'][0])
+                for key, value in leadershipResults.items():
+                    if improve_dimension in key:
+                        if leadershipResults[key][0] < 1:
+                            st.write("🔴" + key + " - " + leadershipPoliciesText[key][0])
+                            # st.write(key)
+                st.markdown(f'''##### ➜ Additional policies to achieve {dimension[dimension_value+1]} maximum level''', unsafe_allow_html=True)
+                # st.write("**➜ Additional policies to achieve **" + dimension[dimension_value+1] + "** maximum level**")
+                for key, value in leadershipResults.items():
+                    if "M" in key:
+                        if leadershipResults[key][0] < 1:
+                            # st.write(key)
+                            st.write("🟠" + key + " - " + leadershipPoliciesText[key][0])
 
     ##
     # Overview of Policies by years
