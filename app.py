@@ -354,7 +354,7 @@ with st.expander('Questions Performance Analysis', expanded=True):
 with st.expander('Completeness', expanded=True):
     st.subheader('Completeness - Leadership & Governance')
 
-    linegraphView = st.selectbox('Select the view',
+    linegraphView = st.selectbox('Select the view - To see the recommendations select "SMART Completeness (All subdimensions)"',
     ('Policies Completeness','SMART Completeness (Each subdimension)','SMART Completeness (All subdimensions)'))
 
     if linegraphView == 'Policies Completeness':
