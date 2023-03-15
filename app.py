@@ -115,17 +115,17 @@ with st.sidebar:
     questionnaire = st.selectbox(
         'Select the questionnaire',
         ('answer 1',
-         'answer 2', 
-         'answer 3',# 'answer 4', 'answer 5', 'answer 6', 'answer 7', 'answer 8', 'answer 9', 'answer 10', 'answer 11', 
+        #  'answer 2', 
+        #  'answer 3',# 'answer 4', 'answer 5', 'answer 6', 'answer 7', 'answer 8', 'answer 9', 'answer 10', 'answer 11', 
          'mean'))
 
     match questionnaire:
         case "answer 1":
             df_pol = df.iloc[0]
-        case "answer 2":
-            df_pol = df.iloc[1]
-        case "answer 3":
-            df_pol = df.iloc[2]
+        # case "answer 2":
+        #     df_pol = df.iloc[1]
+        # case "answer 3":
+        #     df_pol = df.iloc[2]
         # case "answer 4":
         #     df_pol = df.iloc[3]
         # case "answer 5":
@@ -202,6 +202,69 @@ text = 'Urban Development <br>& Environmental'
 reference = 25#22
 fig5 = gauge_charts(completenessUrban, text, reference)
 sec5_col5.plotly_chart(fig5, use_container_width=True)
+
+
+
+
+fig = go.Figure()
+# Create scatter trace of text labels
+config = {'staticPlot': True}
+fig.add_trace(go.Scatter(
+    x=[0.5, 1.5, 2.5, 3.5, 4.5],
+    y=[1.4, 1.4, 1.4, 1.4, 1.4],
+    text=["STARTING",
+          "MODERATE",
+          "ADVANCED",
+          "ROBUST",
+          "VERTEBRATE"],
+    mode="text",
+))
+# Set axes properties
+fig.update_xaxes(range=[0, 5])
+fig.update_yaxes(range=[0, 2])
+# Add shapes
+fig.add_shape(type="rect",
+    xref="x", yref="y",
+    x0=0, y0=0,
+    x1=1, y1=1,
+    fillcolor="#ef476f",)
+
+fig.add_shape(type="rect",
+    xref="x", yref="y",
+    x0=1, y0=0,
+    x1=2, y1=1,
+    fillcolor="#ffd166",)
+
+fig.add_shape(type="rect",
+    xref="x", yref="y",
+    x0=2, y0=0,
+    x1=3, y1=1,
+    fillcolor="#06d6a0",)
+
+fig.add_shape(type="rect",
+    xref="x", yref="y",
+    x0=3, y0=0,
+    x1=4, y1=1,
+    fillcolor="#118ab2",)
+
+fig.add_shape(type="rect",
+    xref="x", yref="y",
+    x0=4, y0=0,
+    x1=5, y1=1,
+    fillcolor="#073b4c",)
+
+fig.update_layout(
+    autosize=False,
+    width=70,
+    height=70,
+    font=dict(size=18),
+    yaxis_visible=False, yaxis_showticklabels=False,
+    margin= dict(l=0,r=0,b=0,t=0),
+    plot_bgcolor =  'rgba(0,0,0,0)',
+    paper_bgcolor =  'rgba(0,0,0,0)'
+)
+st.plotly_chart(fig, use_container_width=True, config=config)
+
 
 # tab1, tab2, tab3, tab4, tab5 = st.tabs(['Leadership & Governance', 'Preparedness', 'Cooperation','Infrastructure & Resources', 'Urban Development & Environmental'])
 tab1, tab2, = st.tabs(['Leadership & Governance', 'Urban Development & Environmental'])

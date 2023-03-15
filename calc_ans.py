@@ -1,4 +1,5 @@
 import data
+import streamlit as st
 
 def Leadership(df_pol, dfL1Best, dfL2Best, dfL3Best, dfL4Best):
     L1S1 = (((df_pol['L1Q1'])/(data.dfL1Best[0]-2)>=1 and (1,) or (0,))[0])
@@ -28,7 +29,7 @@ def Leadership(df_pol, dfL1Best, dfL2Best, dfL3Best, dfL4Best):
     L4A1 = ((df_pol['L4Q6']>1 and (((df_pol['L4Q6']-1)/(data.dfL4Best[5]-1)),) or (0,))[0])
     L4S2 = ((df_pol['L4Q1']>1 and (((df_pol['L4Q1']-1)/(data.dfL4Best[0]-1)),) or (0,))[0])
     L4M2 = ((((L4S2>=0.75 and (((df_pol['L4Q2']>1 and (((df_pol['L4Q2']/(data.dfL4Best[1]-2)<1 and ((df_pol['L4Q2']/(data.dfL4Best[1]-2)),) or (1,))[0]),) or (0,))[0]),) or (0,))[0])+(((df_pol['L4Q4'])/(data.dfL4Best[3]-1)>=1 and (1,) or ((df_pol['L4Q4'])/(data.dfL4Best[3]-1),))[0]))/2)
-    L4A2 = (((L4S2>=0.75 and ((((df_pol['L4Q2']-1)/(data.dfL4Best[1]-2)>1 and (1,) or ((df_pol['L4Q2']-1)/(data.dfL4Best[1]-2),))[0]),) or (0,))[0]+(df_pol['L4Q4']/data.dfL4Best[3]))/2)
+    L4A2 = (((L4M2>=0.75 and ((((df_pol['L4Q2']-1)/(data.dfL4Best[1]-2)>1 and (1,) or ((df_pol['L4Q2']-1)/(data.dfL4Best[1]-2),))[0]),) or (0,))[0]+(df_pol['L4Q4']/data.dfL4Best[3]))/2)
     L4R2 = ((L4A2>=0.75 and (((df_pol['L4Q2']>1 and ((df_pol['L4Q2']-1)/(data.dfL4Best[1]-1),) or (0,))[0]),) or (0,))[0])
     L4M3 = ((df_pol['L4Q3'])/(data.dfL4Best[2]))
     L4T3 = ((L4M3>=0.75 and (((df_pol['L4Q7']>1 and (((df_pol['L4Q7']-1)/(data.dfL4Best[6]-1)),) or (0,))[0]),) or (0,))[0])
