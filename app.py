@@ -618,7 +618,7 @@ with tab2:
                                          (urbanResults['E1A1'][0] + urbanResults['E1A2'][0] + urbanResults['E1A3'][0])/3,
                                          (urbanResults['E1R2'][0] + urbanResults['E1R3'][0] + urbanResults['E1A4'][0])/3,
                                          urbanResults['E1T1'][0]]
-            title = 'All Policies - L2'
+            title = 'All Policies - E1'
             fig2 = line_charts(dimension, valueBestDimension, valueCapturedCompleteness, title)
             sec4_col2.plotly_chart(fig2, use_container_width=True)
         
