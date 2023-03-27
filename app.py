@@ -276,8 +276,8 @@ with tab1:
     ##
     # RADAR CHARTS
     ##
-    with st.expander('Questions Performance Analysis', expanded=True):
-        st.subheader('Questions Performance Analysis - Leadership & Governance')
+    with st.expander('Questions Performance Analysis (Mean between all answers)', expanded=True):
+        st.subheader('Questions Performance Analysis - Leadership & Governance (Mean between all answers)')
         
         col1, col2 = st.columns([1,1])
         # RADAR L1
