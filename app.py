@@ -114,16 +114,16 @@ with st.sidebar:
     
     questionnaire = st.selectbox(
         'Select the questionnaire',
-        ('answer 1 - 16/03 (Urban)',
-         'answer 2 - 27/03 (Leadership)', 
+        ('answer 1 - 27/03 (Leadership)',
+        #  'answer 2 - 27/03 (Leadership)', 
         #  'answer 3',# 'answer 4', 'answer 5', 'answer 6', 'answer 7', 'answer 8', 'answer 9', 'answer 10', 'answer 11', 
          'mean'))
 
     match questionnaire:
-        case "answer 1 - 16/03 (Urban)":
+        case "answer 1 - 27/03 (Leadership)":
             df_pol = df.iloc[0]
-        case "answer 2 - 27/03 (Leadership)":
-            df_pol = df.iloc[1]
+        #case "answer 2 - 27/03 (Leadership)":
+        #    df_pol = df.iloc[1]
         # case "answer 3":
         #     df_pol = df.iloc[2]
         # case "answer 4":
