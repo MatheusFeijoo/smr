@@ -6,13 +6,16 @@ import numpy as np
 import data #data to run the formulas
 import calc_ans #functions to calculate the answers
 
-st.set_page_config(layout = "wide")
+st.set_page_config(layout = "wide",
+                   page_title = "SMR Dashboard",
+                   page_icon = "📊")
+
+st.sidebar.success("Select a page above.")
 
 df = pd.read_csv('answers.csv', sep=',')
 df = df.replace(np.nan,0)
 pd.options.display.float_format = '{:,.0f}'.format
 qnt_answers = len(df.index)
-
 ###
 ###    GENERATING THE CHARTS
 ###
@@ -160,7 +163,7 @@ title1, title2 = st.columns((0.11,1))
 with title1:
     st.image('logo_smr.png', width = 120)
 with title2:
-    st.title('SMR DashboardasdasdAS - ' + city)
+    st.title('SMR Dashboard - ' + city)
 
 ###
 ###    POLICIES COMPLETENESS IN GENERAL
