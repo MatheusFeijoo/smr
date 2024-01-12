@@ -160,7 +160,7 @@ title1, title2 = st.columns((0.11,1))
 with title1:
     st.image('logo_smr.png', width = 120)
 with title2:
-    st.title('SMR Dashboard - ' + city)
+    st.title('SMR DashboardasdasdAS - ' + city)
 
 ###
 ###    POLICIES COMPLETENESS IN GENERAL
