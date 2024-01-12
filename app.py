@@ -20,11 +20,11 @@ qnt_answers = len(df.index)
 def gauge_charts (completeness, text, reference):
     match text:
             case "Leadership & Governance":
-                starting = [0, 5] #5
-                moderate = [5, 10] # 13
-                advanced = [10, 15] # 20
-                robust = [15, 20] # 24
-                vertebrate = [20, 25] # 29
+                starting = [0, 6] #5
+                moderate = [6, 12] # 13
+                advanced = [12, 17] # 20
+                robust = [17, 23] # 24
+                vertebrate = [23, 29] # 29
             case "Preparedness <br> Synthetic data":
                 starting = [0, 5] # 6
                 moderate = [5, 10]#10
@@ -44,11 +44,11 @@ def gauge_charts (completeness, text, reference):
                 robust = [15, 20]#17
                 vertebrate = [20, 25]#21
             case "Urban Development <br>& Environmental":
-                starting = [0, 5]#4
-                moderate = [5, 10]#10
-                advanced = [10, 15]#17
-                robust = [15, 20]#21
-                vertebrate = [20, 25]#22
+                starting = [0, 4]#4
+                moderate = [4, 9]#10
+                advanced = [9, 13]#17
+                robust = [13, 17]#21
+                vertebrate = [17, 22]#22
             case _:
                 print("error")
     fig = go.Figure(go.Indicator(
@@ -114,16 +114,16 @@ with st.sidebar:
     
     questionnaire = st.selectbox(
         'Select the questionnaire',
-        ('answer 1',
-        #  'answer 2', 
+        ('answer 1 - 27/03 (Leadership)',
+        #  'answer 2 - 27/03 (Leadership)', 
         #  'answer 3',# 'answer 4', 'answer 5', 'answer 6', 'answer 7', 'answer 8', 'answer 9', 'answer 10', 'answer 11', 
          'mean'))
 
     match questionnaire:
-        case "answer 1":
+        case "answer 1 - 27/03 (Leadership)":
             df_pol = df.iloc[0]
-        # case "answer 2":
-        #     df_pol = df.iloc[1]
+        #case "answer 2 - 27/03 (Leadership)":
+        #    df_pol = df.iloc[1]
         # case "answer 3":
         #     df_pol = df.iloc[2]
         # case "answer 4":
@@ -171,7 +171,7 @@ sec5_col1, sec5_col2, sec5_col3, sec5_col4, sec5_col5 = st.columns([1,1,1,1,1])
 #GAUGE 1 - Leadership & Governance
 completenessLeadership = sum(leadershipCompleteness)
 text = 'Leadership & Governance'
-reference = 25#29
+reference = 29
 fig1 = gauge_charts(completenessLeadership, text, reference)
 sec5_col1.plotly_chart(fig1, use_container_width=True)
 
@@ -199,7 +199,7 @@ sec5_col4.plotly_chart(fig4, use_container_width=True)
 #GAUGE 5 - Urban Development & Environmental
 completenessUrban = sum(urbanCompleteness)
 text = 'Urban Development <br>& Environmental'
-reference = 25#22
+reference = 22
 fig5 = gauge_charts(completenessUrban, text, reference)
 sec5_col5.plotly_chart(fig5, use_container_width=True)
 
@@ -276,8 +276,8 @@ with tab1:
     ##
     # RADAR CHARTS
     ##
-    with st.expander('Questions Performance Analysis', expanded=True):
-        st.subheader('Questions Performance Analysis - Leadership & Governance')
+    with st.expander('Questions Performance Analysis (Mean between all answers)', expanded=True):
+        st.subheader('Questions Performance Analysis - Leadership & Governance (Mean between all answers)')
         
         col1, col2 = st.columns([1,1])
         # RADAR L1
@@ -618,7 +618,7 @@ with tab2:
                                          (urbanResults['E1A1'][0] + urbanResults['E1A2'][0] + urbanResults['E1A3'][0])/3,
                                          (urbanResults['E1R2'][0] + urbanResults['E1R3'][0] + urbanResults['E1A4'][0])/3,
                                          urbanResults['E1T1'][0]]
-            title = 'All Policies - L2'
+            title = 'All Policies - E1'
             fig2 = line_charts(dimension, valueBestDimension, valueCapturedCompleteness, title)
             sec4_col2.plotly_chart(fig2, use_container_width=True)
         
