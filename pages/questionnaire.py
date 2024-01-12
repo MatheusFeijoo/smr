@@ -2,11 +2,16 @@ import streamlit as st
 
 st.title("Questionnaire")
 
-city = st.radio(
-        "Select the city to assess",
-        ["Donostia", "Sevilla", "Valencia"],
-         horizontal=True)
-
+with st.expander("Personal Information"):
+    name = st.text_input('Name')
+    email = st.text_input("E-mail")
+    city = st.radio(
+            "Select the city to assess",
+            ["Donostia", "Sevilla", "Valencia"],
+            horizontal=True)
+    professionalRole = st.text_input("Professional Role")
+    yearsOfExperience = st.text_input("Years of Experience")
+    mainChallenges = st.text_input('Main Challenges')
 
 tab1, tab2, tab3 = st.tabs(["Leadership", 'Urban Development', 'Environmental'])
 
@@ -148,3 +153,7 @@ with tab3:
     E1Q11 = st.radio(
         "Does your city monitor and evaluate the effectiveness of already implemented climate change mitigation measures? Promotion of sustainable transport (i.e. electric cars, public transport, bikes…)",
         ["The city does not monitor and evaluate the implemented climate mitigation measures.", "The city monitors the already implemented climate change mitigation measures but it does not evaluate their effectiveness.", "They city monitors the already implemented climate change mitigation measures and partially evaluate their effectiveness.", "They city monitors and evaluates the effectiveness of the already implemented climate change mitigation measures."])
+    
+
+if st.button('Submit Questionnaire'):
+   st.write('Done!')
