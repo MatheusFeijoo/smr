@@ -59,15 +59,15 @@ def Leadership(df_pol, dfL1Best, dfL2Best, dfL3Best, dfL4Best):
     return leadershipResults, completeness
 
 def Preparedness (df_pol, dfP1Best, dfP2Best):
-    preparednessResults = preparednessCompleteness = 14
+    preparednessResults = preparednessCompleteness = 5
     return preparednessResults, preparednessCompleteness
 
 def Infra (df_pol, dfI1Best, dfI2Best):
-    infraResults = infraCompleteness = 16
+    infraResults = infraCompleteness = 12
     return infraResults, infraCompleteness
 
 def Cooperation (df_pol, dfC1Best, dfC2Best):
-    cooperationResults = cooperationCompleteness = 13
+    cooperationResults = cooperationCompleteness = 15
     return cooperationResults, cooperationCompleteness
 
 def Urban (df_pol, dfU1Best, dfE1Best):

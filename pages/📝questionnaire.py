@@ -383,7 +383,7 @@ row_to_insert_answers =[{"email":email, "city":city,
                          "L1Q1":L1Q1,"L1Q2":L1Q2,"L1Q3":L1Q3,"L1Q4":L1Q4,"L1Q5":L1Q5,
                          "L2Q1":L2Q1,"L2Q2":L2Q2,
                          "L3Q1":L3Q1,"L3Q2":L3Q2,"L3Q3":L3Q3,"L3Q4":L3Q4,"L3Q5":L3Q5,
-                         "L4Q1":L4Q1,"L4Q2":L4Q2,"L4Q3":L4Q3,"L4Q4":L4Q4,"L4Q5":L4Q5,
+                         "L4Q1":L4Q1,"L4Q2":L4Q2,"L4Q3":L4Q3,"L4Q4":L4Q4,"L4Q5":L4Q5, "L4Q6":L4Q6, "L4Q7":L4Q7,
                          "U1Q1":U1Q1,"U1Q2":U1Q2,"U1Q3":U1Q3,"U1Q4":U1Q4,"U1Q5":U1Q5,"U1Q6":U1Q6,"U1Q7":U1Q7,"U1Q8":U1Q8,"U1Q9":U1Q9,"U1Q10":U1Q10,"U1Q11":U1Q11,
                          "E1Q1":E1Q1,"E1Q2":E1Q2,"E1Q3":E1Q3,"E1Q4":E1Q4,"E1Q5":E1Q5,"E1Q6":E1Q6,"E1Q7":E1Q7,"E1Q8":E1Q8,"E1Q9":E1Q9,"E1Q10":E1Q10,"E1Q11":E1Q11}]
 

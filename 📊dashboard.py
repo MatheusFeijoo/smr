@@ -19,25 +19,29 @@ pd.options.display.float_format = '{:,.0f}'.format
 qnt_answers = len(df.index)
 
 
-# # Create API client, Google Cloud Big Query
-# credentials = service_account.Credentials.from_service_account_info( st.secrets["gcp_service_account"] )
-# client = bigquery.Client(credentials=credentials)
-# # Perform query.
-# # Uses st.cache_data to only rerun when the query changes or after 10 min.
-# @st.cache_data(ttl=600)
-# def run_query(query):
-#     query_job = client.query(query)
-#     rows_raw = query_job.result()
-#     # Convert to list of dicts. Required for st.cache_data to hash the return value.
-#     rows = [dict(row) for row in rows_raw]
-#     return rows
-# rows = run_query("SELECT name FROM `answers.answers` LIMIT 10")
-# # Print results.
-# st.write("Some wise words from Shakespeare:")
-# for row in rows:
-#     st.write("✍️ " + row['name'])
+# Create API client, Google Cloud Big Query
+credentials = service_account.Credentials.from_service_account_info( st.secrets["gcp_service_account"] )
+client = bigquery.Client(credentials=credentials)
+# Perform query.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+@st.cache_data(ttl=600)
+def run_query(query):
+    query_job = client.query(query)
+    rows_raw = query_job.result()
+    # Convert to list of dicts. Required for st.cache_data to hash the return value.
+    rows = [dict(row) for row in rows_raw]
+    return rows
+rows = run_query("SELECT * FROM `answers.answers`")
+# Print results.
 
+df_bigquery = pd.DataFrame(rows)
+df_donostia = df_bigquery.loc[df_bigquery['city'] == 'Donostia'].mean()
+df_valencia = df_bigquery.loc[df_bigquery['city'] == 'Valencia'].mean()
+df_sevilla = df_bigquery.loc[df_bigquery['city'] == 'Sevilla'].mean()
 
+df_donostia = df_donostia.fillna(0)
+df_valencia = df_valencia.fillna(0)
+df_sevilla = df_sevilla.fillna(0)
 
 ###
 ###    GENERATING THE CHARTS
@@ -46,41 +50,41 @@ qnt_answers = len(df.index)
 def gauge_charts (completeness, text, reference):
     match text:
             case "Leadership & Governance":
-                starting = [0, 6] #5
-                moderate = [6, 12] # 13
-                advanced = [12, 17] # 20
-                robust = [17, 23] # 24
-                vertebrate = [23, 29] # 29
+                starting = [0, 5]
+                moderate = [5, 10]
+                advanced = [10, 15]
+                robust = [15, 20]
+                vertebrate = [20, 25]
             case "Preparedness <br> Synthetic data":
-                starting = [0, 5] # 6
-                moderate = [5, 10]#10
-                advanced = [10, 15]#17
-                robust = [15, 20]#20
-                vertebrate = [20, 25]#23
+                starting = [0, 5]
+                moderate = [5, 10]
+                advanced = [10, 15]
+                robust = [15, 20]
+                vertebrate = [20, 25]
             case "Infrastructure & Resources <br> Synthetic data":
-                starting = [0, 5]#6
-                moderate = [5, 10]#14
-                advanced = [10, 15]#21
-                robust = [15, 20]#24
-                vertebrate = [20, 25]#28
+                starting = [0, 5]
+                moderate = [5, 10]
+                advanced = [10, 15]
+                robust = [15, 20]
+                vertebrate = [20, 25]
             case "Cooperation <br> Synthetic data":
-                starting = [0, 5]#2
-                moderate = [5, 10]#7
-                advanced = [10, 15]#13
-                robust = [15, 20]#17
-                vertebrate = [20, 25]#21
+                starting = [0, 5]
+                moderate = [5, 10]
+                advanced = [10, 15]
+                robust = [15, 20]
+                vertebrate = [20, 25]
             case "Urban Development <br>& Environmental":
-                starting = [0, 4]#4
-                moderate = [4, 9]#10
-                advanced = [9, 13]#17
-                robust = [13, 17]#21
-                vertebrate = [17, 22]#22
+                starting = [0, 5]
+                moderate = [5, 10]
+                advanced = [10, 15]
+                robust = [15, 20]
+                vertebrate = [20, 25]
             case _:
                 print("error")
     fig = go.Figure(go.Indicator(
         domain = {'x': [0, 1], 'y': [0, 1]},
         value = completeness,
-        mode = "gauge+number+delta",
+        mode = "gauge+number",
         title = {'text': text},
         delta = {'reference': reference},
         gauge = {'axis': {'range': [None, reference]},
@@ -134,44 +138,31 @@ def line_charts(dimension, valueBestDimension, valueCapturedCompleteness, title)
 ###
 # SELECTION CITY AND DIMENSION
 with st.sidebar:
-    city = st.selectbox(
-        'Select city',
-        ('Donostia', 'Pamplona', 'Bilbao'))
+    # city = st.selectbox(
+    #     'Select city',
+    #     ("Donostia", "Sevilla", "Valencia"))
     
     questionnaire = st.selectbox(
-        'Select the questionnaire',
-        ('answers - 16/03',
-        #  'answer 2 - 27/03 (Urban Development & Environment)', 
-        #  'answer 3',# 'answer 4', 'answer 5', 'answer 6', 'answer 7', 'answer 8', 'answer 9', 'answer 10', 'answer 11', 
-         'mean'))
+        'Select the option',
+        ('Donostia (16/03/23)',
+         'Donostia',
+         'Sevilla',
+         'Valencia'
+         ))
 
     match questionnaire:
-        case "answers - 16/03":
+        case "Donostia (16/03/23)":
             df_pol = df.iloc[0]
-        # case "answer 2 - 27/03 (Urban Development & Environment)":
-        #    df_pol = df.iloc[1]
-        # case "answer 3":
-        #     df_pol = df.iloc[2]
-        # case "answer 4":
-        #     df_pol = df.iloc[3]
-        # case "answer 5":
-        #     df_pol = df.iloc[4]
-        # case "answer 6":
-        #     df_pol = df.iloc[5]
-        # case "answer 7":
-        #     df_pol = df.iloc[6]
-        # case "answer 8":
-        #     df_pol = df.iloc[7]
-        # case "answer 9":
-        #     df_pol = df.iloc[8]
-        # case "answer 10":
-        #     df_pol = df.iloc[9]
-        # case "answer 11":
-        #     df_pol = df.iloc[10]
-        case "mean":
-            df_pol = df.mean(axis=0)
+        case "Donostia":
+            df_pol = df_donostia
+        case "Sevilla":
+            df_pol = df_sevilla
+        case "Valencia":
+            df_pol = df_valencia
         case _:
             print("error")
+
+    st.write(df_pol)
 
     leadershipResults, leadershipCompleteness = calc_ans.Leadership(df_pol, data.dfL1Best, data.dfL2Best, data.dfL3Best, data.dfL4Best)
     preparednessResults, preparednessCompleteness = calc_ans.Preparedness(df_pol, data.dfP1Best, data.dfP2Best)
@@ -186,7 +177,7 @@ title1, title2 = st.columns((0.11,1))
 with title1:
     st.image('logo_smr.png', width = 120)
 with title2:
-    st.title('SMR Dashboard - ' + city)
+    st.title('SMR Dashboard - ' + questionnaire)
 
 ###
 ###    POLICIES COMPLETENESS IN GENERAL
@@ -196,40 +187,58 @@ sec5_col1, sec5_col2, sec5_col3, sec5_col4, sec5_col5 = st.columns([1,1,1,1,1])
 
 #GAUGE 1 - Leadership & Governance
 completenessLeadership = sum(leadershipCompleteness)
+if leadershipCompleteness[0] < 5:
+    valueLeadership = leadershipCompleteness[0]
+elif leadershipCompleteness[1] < 8:
+    valueLeadership = leadershipCompleteness[1] + leadershipCompleteness[0]
+elif leadershipCompleteness[2] < 7:
+    valueLeadership = leadershipCompleteness[2] + leadershipCompleteness[1] + leadershipCompleteness[0]
+elif leadershipCompleteness[3] < 4:
+    valueLeadership = leadershipCompleteness[3] + leadershipCompleteness[2] + leadershipCompleteness[1] + leadershipCompleteness[0]
+elif leadershipCompleteness[4] < 5:
+    valueLeadership = leadershipCompleteness[4] + leadershipCompleteness[3] + leadershipCompleteness[2] + leadershipCompleteness[1] + leadershipCompleteness[0]
 text = 'Leadership & Governance'
-reference = 29
-fig1 = gauge_charts(completenessLeadership, text, reference)
+reference = 25
+fig1 = gauge_charts(valueLeadership, text, reference)
 sec5_col1.plotly_chart(fig1, use_container_width=True)
 
 #GAUGE 2 - Preparedness
 completenessPreparedness = preparednessCompleteness
 text = 'Preparedness <br> Synthetic data'
-reference = 25#23
+reference = 25
 fig2 = gauge_charts(completenessPreparedness, text, reference)
 sec5_col2.plotly_chart(fig2, use_container_width=True)
 
 #GAUGE 3 - Infrastructure & Resources
 completenessInfra = infraCompleteness
 text = 'Infrastructure & Resources <br> Synthetic data'
-reference = 25#28
+reference = 25
 fig3 = gauge_charts(completenessInfra, text, reference)
 sec5_col3.plotly_chart(fig3, use_container_width=True)
 
 #GAUGE 4 - Cooperation
 completenessCooperation = cooperationCompleteness
 text = 'Cooperation <br> Synthetic data'
-reference = 25#21
+reference = 25
 fig4 = gauge_charts(completenessCooperation, text, reference)
 sec5_col4.plotly_chart(fig4, use_container_width=True)
 
 #GAUGE 5 - Urban Development & Environmental
 completenessUrban = sum(urbanCompleteness)
+if urbanCompleteness[0] < 5:
+    valueUrban = urbanCompleteness[0]
+elif urbanCompleteness[1] < 8:
+    valueUrban = urbanCompleteness[1] + urbanCompleteness[0]
+elif urbanCompleteness[2] < 6:
+    valueUrban = urbanCompleteness[2] + urbanCompleteness[1] + urbanCompleteness[0]
+elif urbanCompleteness[3] < 3:
+    valueUrban = urbanCompleteness[3] + urbanCompleteness[2] + urbanCompleteness[1] + urbanCompleteness[0]
+elif urbanCompleteness[4] < 1:
+    valueUrban = urbanCompleteness[4] + urbanCompleteness[3] + urbanCompleteness[2] + urbanCompleteness[1] + urbanCompleteness[0]
 text = 'Urban Development <br>& Environmental'
-reference = 22
-fig5 = gauge_charts(completenessUrban, text, reference)
+reference = 25
+fig5 = gauge_charts(valueUrban, text, reference)
 sec5_col5.plotly_chart(fig5, use_container_width=True)
-
-
 
 
 fig = go.Figure()
@@ -304,12 +313,11 @@ with tab1:
     ##
     with st.expander('Questions Performance Analysis (Mean between all answers)', expanded=True):
         st.subheader('Questions Performance Analysis - Leadership & Governance (Mean between all answers)')
-        
         col1, col2 = st.columns([1,1])
         # RADAR L1
         categories = ['Resilience<br>Governance', 'Development<br>of<br>RAP', 'RAP<br>Integration', 'Access to basic services', 'Support to other cities']
         best = [4, 4, 4, 4, 4]
-        mean = [df['L1Q1'].mean(),df['L1Q2'].mean(),df['L1Q3'].mean(),df['L1Q4'].mean(),df['L1Q5'].mean()]
+        mean = [df_pol['L1Q1'].mean(),df_pol['L1Q2'].mean(),df_pol['L1Q3'].mean(),df_pol['L1Q4'].mean(),df_pol['L1Q5'].mean()]
         text='Leadership & Governance (L1)'
         fig1 = radar_charts(categories, best, mean, text)
         col1.plotly_chart(fig1, use_container_width=True)
@@ -317,7 +325,7 @@ with tab1:
         # RADAR L2
         categories = ['Standards<br>Alignment', 'Certification<br>Processes']
         best = [4, 4]
-        mean = [df['L2Q1'].mean(), df['L2Q2'].mean()]
+        mean = [df_pol['L2Q1'].mean(), df_pol['L2Q2'].mean()]
         text='Leadership & Governance (L2)'
         fig2 = radar_charts(categories, best, mean, text)
         col2.plotly_chart(fig2, use_container_width=True)
@@ -326,7 +334,7 @@ with tab1:
         # RADAR L3
         categories = ['Resilience<br>Culture', 'Lessons<br>Past Events', 'Knowledge<br>Sharing', 'Learning<br>Process', 'Learning Process<br>Assessment']
         best = [4, 4, 4, 4, 4]
-        mean = [df['L3Q1'].mean(), df['L3Q2'].mean(), df['L3Q3'].mean(), df['L3Q4'].mean(), df['L3Q5'].mean()]
+        mean = [df_pol['L3Q1'].mean(), df_pol['L3Q2'].mean(), df_pol['L3Q3'].mean(), df_pol['L3Q4'].mean(), df_pol['L3Q5'].mean()]
         text='Leadership & Governance (L3)'
         fig3 = radar_charts(categories, best, mean, text)
         col3.plotly_chart(fig3, use_container_width=True)
@@ -334,7 +342,7 @@ with tab1:
         # RADAR L4
         categories = ['Disaster Response<br>Plan', 'RAP Plan<br>Development', 'Stakeholders<br>Collaboration', 'Disaster<br>Focus', 'Climate Change<br>Perspective', 'Resilience Adoption<br>and Integration', 'Collaboration and Networking with<br>Cities and External Bodies']
         best = [4, 4, 4, 4, 4, 4, 4]
-        mean = [df['L4Q1'].mean(), df['L4Q2'].mean(), df['L4Q3'].mean(), df['L4Q4'].mean(), df['L4Q5'].mean(), df['L4Q6'].mean(), df['L4Q7'].mean()]
+        mean = [df_pol['L4Q1'].mean(), df_pol['L4Q2'].mean(), df_pol['L4Q3'].mean(), df_pol['L4Q4'].mean(), df_pol['L4Q5'].mean(), df_pol['L4Q6'].mean(), df_pol['L4Q7'].mean()]
         text='Leadership & Governance (L4)'
         fig4 = radar_charts(categories, best, mean, text)
         col4.plotly_chart(fig4, use_container_width=True)
@@ -514,20 +522,20 @@ with tab1:
     # Overview of Policies by years
     ##
     with st.expander("SMR Completeness", expanded=True):
-        st.subheader("Cities and SMR Completeness - Leadership & Governance")
+        st.subheader("Cities and SMR Completeness - Urban Development & Environmental")
 
         x = [
             ["2022", "2022", "2022",
             "2023", "2023", "2023"],
-            ["Donostia - Synthetic data", "Bilbao - Synthetic data", "Pamplona - Synthetic data",
-            "Donostia", " Bilbao - Synthetic data", "  Pamplona - Synthetic data"]
+            ["Donostia - Synthetic data", "Sevilla - Synthetic data", "Valencia - Synthetic data",
+            "Donostia", "  Sevilla - Synthetic data", "  Valencia - Synthetic data"]
         ]
         fig = go.Figure()
-        fig.add_trace(go.Bar(x=x, y=[3, 4, 3, leadershipCompleteness[0], 5, 4], name='Starting', marker_color = "#ef476f"))
-        fig.add_trace(go.Bar(x=x, y=[1, 3, 2, leadershipCompleteness[1], 4, 3], name='Robust', marker_color = "#ffd166"))
-        fig.add_trace(go.Bar(x=x, y=[0, 2, 1, leadershipCompleteness[2], 3, 2], name='Advanced', marker_color = "#06d6a0"))
-        fig.add_trace(go.Bar(x=x, y=[0, 1, 0, leadershipCompleteness[3], 2, 1], name='Moderate', marker_color = "#118ab2"))
-        fig.add_trace(go.Bar(x=x, y=[0, 0, 0, leadershipCompleteness[4], 1, 0], name='Vertebrate', marker_color = "#073b4c"))
+        fig.add_trace(go.Bar(x=x, y=[3, 4, 3, urbanCompleteness[0], 5, 4], name='Starting', marker_color = "#ef476f"))
+        fig.add_trace(go.Bar(x=x, y=[1, 3, 2, urbanCompleteness[1], 4, 3], name='Robust', marker_color = "#ffd166"))
+        fig.add_trace(go.Bar(x=x, y=[0, 2, 1, urbanCompleteness[2], 3, 2], name='Advanced', marker_color = "#06d6a0"))
+        fig.add_trace(go.Bar(x=x, y=[0, 1, 0, urbanCompleteness[3], 2, 1], name='Moderate', marker_color = "#118ab2"))
+        fig.add_trace(go.Bar(x=x, y=[0, 0, 0, urbanCompleteness[4], 1, 0], name='Vertebrate', marker_color = "#073b4c"))
         fig.update_layout(barmode="relative")
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
@@ -552,17 +560,17 @@ with tab2:
                       'Sustainable Design and Risk Reduction Measures in Buildings',
                       'Sustainable Design and Development of Urban Mobility and Public Services',]
         best = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-        mean = [df['U1Q1'].mean(), 
-                df['U1Q2'].mean(), 
-                df['U1Q3'].mean(), 
-                df['U1Q4'].mean(), 
-                df['U1Q5'].mean(), 
-                df['U1Q6'].mean(), 
-                df['U1Q7'].mean(), 
-                df['U1Q8'].mean(), 
-                df['U1Q9'].mean(),
-                df['U1Q10'].mean(),
-                df['U1Q11'].mean()]
+        mean = [df_pol['U1Q1'].mean(), 
+                df_pol['U1Q2'].mean(), 
+                df_pol['U1Q3'].mean(), 
+                df_pol['U1Q4'].mean(), 
+                df_pol['U1Q5'].mean(), 
+                df_pol['U1Q6'].mean(), 
+                df_pol['U1Q7'].mean(), 
+                df_pol['U1Q8'].mean(), 
+                df_pol['U1Q9'].mean(),
+                df_pol['U1Q10'].mean(),
+                df_pol['U1Q11'].mean()]
         text='Urban Development & Environmental (U1)'
         fig1 = radar_charts(categories, best, mean, text)
         col1.plotly_chart(fig1, use_container_width=True)
@@ -577,12 +585,12 @@ with tab2:
                       'Climate change mitigation',
                       'Monitoring and evaluation of the climate change mitigation measures']
         best = [4, 4, 4, 4, 4, 4, 4, 4]
-        mean = [df['E1Q1'].mean(), 
-                df['E1Q2'].mean(), 
-                df['E1Q3'].mean(), 
-                df['E1Q4'].mean(),
-                df['E1Q5'].mean(),
-                df['E1Q6'].mean(), 
+        mean = [df_pol['E1Q1'].mean(), 
+                df_pol['E1Q2'].mean(), 
+                df_pol['E1Q3'].mean(), 
+                df_pol['E1Q4'].mean(),
+                df_pol['E1Q5'].mean(),
+                df_pol['E1Q6'].mean(), 
                 (df['E1Q7'].mean() + df['E1Q8'].mean() + df['E1Q9'].mean() + df['E1Q10'].mean())/4,
                 df['E1Q11'].mean()]
         text='Urban Development & Environmental (E1)'
@@ -720,8 +728,8 @@ with tab2:
         x = [
             ["2022", "2022", "2022",
             "2023", "2023", "2023"],
-            ["Donostia - Synthetic data", "Bilbao - Synthetic data", "Pamplona - Synthetic data",
-            "Donostia", " Bilbao - Synthetic data", "  Pamplona - Synthetic data"]
+            ["Donostia - Synthetic data", "Sevilla - Synthetic data", "Valencia - Synthetic data",
+            "Donostia", "  Sevilla - Synthetic data", "  Valencia - Synthetic data"]
         ]
         fig = go.Figure()
         fig.add_trace(go.Bar(x=x, y=[3, 4, 3, urbanCompleteness[0], 5, 4], name='Starting', marker_color = "#ef476f"))
