@@ -162,8 +162,6 @@ with st.sidebar:
         case _:
             print("error")
 
-    st.write(df_pol)
-
     leadershipResults, leadershipCompleteness = calc_ans.Leadership(df_pol, data.dfL1Best, data.dfL2Best, data.dfL3Best, data.dfL4Best)
     preparednessResults, preparednessCompleteness = calc_ans.Preparedness(df_pol, data.dfP1Best, data.dfP2Best)
     infraResults, infraCompleteness = calc_ans.Infra(df_pol, data.dfI1Best, data.dfI2Best)
