@@ -59,15 +59,15 @@ def Leadership(df_pol, dfL1Best, dfL2Best, dfL3Best, dfL4Best):
     return leadershipResults, completeness
 
 def Preparedness (df_pol, dfP1Best, dfP2Best):
-    preparednessResults = preparednessCompleteness = 5
+    preparednessResults = preparednessCompleteness = 14
     return preparednessResults, preparednessCompleteness
 
 def Infra (df_pol, dfI1Best, dfI2Best):
-    infraResults = infraCompleteness = 12
+    infraResults = infraCompleteness = 16
     return infraResults, infraCompleteness
 
 def Cooperation (df_pol, dfC1Best, dfC2Best):
-    cooperationResults = cooperationCompleteness = 15
+    cooperationResults = cooperationCompleteness = 13
     return cooperationResults, cooperationCompleteness
 
 def Urban (df_pol, dfU1Best, dfE1Best):
@@ -99,7 +99,7 @@ def Urban (df_pol, dfU1Best, dfE1Best):
     E1M3 = (E1S3>=0.75 and ((((df_pol['E1Q6']>1 and ((df_pol['E1Q6']-1)/(data.dfE1Best[6]-1),) or (0,))[0]))))
 
     E1A3 = (E1M3>=0.75 and ((((df_pol['E1Q7']>1 and ((df_pol['E1Q7']-1)/(data.dfE1Best[8]-1),) or (0,))[0])+((df_pol['E1Q8']>1 and ((df_pol['E1Q8']-1)/(data.dfE1Best[9]-1),) or (0,))[0])+((df_pol['E1Q9']>1 and ((df_pol['E1Q9']-1)/(data.dfE1Best[10]-1),) or (0,))[0]))/3,) or (0,))[0]
-    E1R3 = (E1A3>=0.75 and (((df_pol['E1Q11']>1 and ((df_pol['E1Q11']-1)/(data.dfE1Best[11]-1),) or (0,))[0]),) or (0,))[0]
+    E1R3 = (E1A3>=0.75 and (((df_pol['E1Q11']>1 and ((df_pol['E1Q11']-1)/(data.dfE1Best[10]-1),) or (0,))[0]),) or (0,))[0]
     E1A4 = (df_pol['E1Q10']>1 and ((df_pol['E1Q10']-1)/(data.dfE1Best[10]-1),) or (0,))[0]
 
     urbanResults = ({'U1S1': [U1S1], 'U1M1': [U1M1], 'U1A1': [U1A1], 'U1R1': [U1R1], 'U1M2': [U1M2], 'U1A2': [U1A2], 'U1S3': [U1S3], 'U1M3': [U1M3], 'U1S4': [U1S4], 'U1M4': [U1M4], 'U1M5': [U1M5], 'U1M6': [U1M6],

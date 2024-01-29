@@ -193,7 +193,7 @@ elif leadershipCompleteness[2] < 7:
     valueLeadership = leadershipCompleteness[2] + leadershipCompleteness[1] + leadershipCompleteness[0]
 elif leadershipCompleteness[3] < 4:
     valueLeadership = leadershipCompleteness[3] + leadershipCompleteness[2] + leadershipCompleteness[1] + leadershipCompleteness[0]
-elif leadershipCompleteness[4] < 5:
+elif leadershipCompleteness[4] <= 5:
     valueLeadership = leadershipCompleteness[4] + leadershipCompleteness[3] + leadershipCompleteness[2] + leadershipCompleteness[1] + leadershipCompleteness[0]
 text = 'Leadership & Governance'
 reference = 25
@@ -223,6 +223,7 @@ sec5_col4.plotly_chart(fig4, use_container_width=True)
 
 #GAUGE 5 - Urban Development & Environmental
 completenessUrban = sum(urbanCompleteness)
+valueUrban = 0
 if urbanCompleteness[0] < 5:
     valueUrban = urbanCompleteness[0]
 elif urbanCompleteness[1] < 8:
@@ -231,7 +232,7 @@ elif urbanCompleteness[2] < 6:
     valueUrban = urbanCompleteness[2] + urbanCompleteness[1] + urbanCompleteness[0]
 elif urbanCompleteness[3] < 3:
     valueUrban = urbanCompleteness[3] + urbanCompleteness[2] + urbanCompleteness[1] + urbanCompleteness[0]
-elif urbanCompleteness[4] < 1:
+elif urbanCompleteness[4] <= 1:
     valueUrban = urbanCompleteness[4] + urbanCompleteness[3] + urbanCompleteness[2] + urbanCompleteness[1] + urbanCompleteness[0]
 text = 'Urban Development <br>& Environmental'
 reference = 25
@@ -315,7 +316,7 @@ with tab1:
         # RADAR L1
         categories = ['Resilience<br>Governance', 'Development<br>of<br>RAP', 'RAP<br>Integration', 'Access to basic services', 'Support to other cities']
         best = [4, 4, 4, 4, 4]
-        mean = [df_pol['L1Q1'].mean(),df_pol['L1Q2'].mean(),df_pol['L1Q3'].mean(),df_pol['L1Q4'].mean(),df_pol['L1Q5'].mean()]
+        mean = [df_pol['L1Q1'].mean()+1,df_pol['L1Q2'].mean()+1,df_pol['L1Q3'].mean()+1,df_pol['L1Q4'].mean()+1,df_pol['L1Q5'].mean()+1]
         text='Leadership & Governance (L1)'
         fig1 = radar_charts(categories, best, mean, text)
         col1.plotly_chart(fig1, use_container_width=True)
@@ -323,7 +324,7 @@ with tab1:
         # RADAR L2
         categories = ['Standards<br>Alignment', 'Certification<br>Processes']
         best = [4, 4]
-        mean = [df_pol['L2Q1'].mean(), df_pol['L2Q2'].mean()]
+        mean = [df_pol['L2Q1'].mean()+1, df_pol['L2Q2'].mean()+1]
         text='Leadership & Governance (L2)'
         fig2 = radar_charts(categories, best, mean, text)
         col2.plotly_chart(fig2, use_container_width=True)
@@ -332,7 +333,7 @@ with tab1:
         # RADAR L3
         categories = ['Resilience<br>Culture', 'Lessons<br>Past Events', 'Knowledge<br>Sharing', 'Learning<br>Process', 'Learning Process<br>Assessment']
         best = [4, 4, 4, 4, 4]
-        mean = [df_pol['L3Q1'].mean(), df_pol['L3Q2'].mean(), df_pol['L3Q3'].mean(), df_pol['L3Q4'].mean(), df_pol['L3Q5'].mean()]
+        mean = [df_pol['L3Q1'].mean()+1, df_pol['L3Q2'].mean()+1, df_pol['L3Q3'].mean()+1, df_pol['L3Q4'].mean()+1, df_pol['L3Q5'].mean()+1]
         text='Leadership & Governance (L3)'
         fig3 = radar_charts(categories, best, mean, text)
         col3.plotly_chart(fig3, use_container_width=True)
@@ -340,7 +341,7 @@ with tab1:
         # RADAR L4
         categories = ['Disaster Response<br>Plan', 'RAP Plan<br>Development', 'Stakeholders<br>Collaboration', 'Disaster<br>Focus', 'Climate Change<br>Perspective', 'Resilience Adoption<br>and Integration', 'Collaboration and Networking with<br>Cities and External Bodies']
         best = [4, 4, 4, 4, 4, 4, 4]
-        mean = [df_pol['L4Q1'].mean(), df_pol['L4Q2'].mean(), df_pol['L4Q3'].mean(), df_pol['L4Q4'].mean(), df_pol['L4Q5'].mean(), df_pol['L4Q6'].mean(), df_pol['L4Q7'].mean()]
+        mean = [df_pol['L4Q1'].mean()+1, df_pol['L4Q2'].mean()+1, df_pol['L4Q3'].mean()+1, df_pol['L4Q4'].mean()+1, df_pol['L4Q5'].mean()+1, df_pol['L4Q6'].mean()+1, df_pol['L4Q7'].mean()+1]
         text='Leadership & Governance (L4)'
         fig4 = radar_charts(categories, best, mean, text)
         col4.plotly_chart(fig4, use_container_width=True)
@@ -558,17 +559,17 @@ with tab2:
                       'Sustainable Design and Risk Reduction Measures in Buildings',
                       'Sustainable Design and Development of Urban Mobility and Public Services',]
         best = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-        mean = [df_pol['U1Q1'].mean(), 
-                df_pol['U1Q2'].mean(), 
-                df_pol['U1Q3'].mean(), 
-                df_pol['U1Q4'].mean(), 
-                df_pol['U1Q5'].mean(), 
-                df_pol['U1Q6'].mean(), 
-                df_pol['U1Q7'].mean(), 
-                df_pol['U1Q8'].mean(), 
-                df_pol['U1Q9'].mean(),
-                df_pol['U1Q10'].mean(),
-                df_pol['U1Q11'].mean()]
+        mean = [df_pol['U1Q1'].mean()+1, 
+                df_pol['U1Q2'].mean()+1, 
+                df_pol['U1Q3'].mean()+1, 
+                df_pol['U1Q4'].mean()+1, 
+                df_pol['U1Q5'].mean()+1, 
+                df_pol['U1Q6'].mean()+1, 
+                df_pol['U1Q7'].mean()+1, 
+                df_pol['U1Q8'].mean()+1, 
+                df_pol['U1Q9'].mean()+1,
+                df_pol['U1Q10'].mean()+1,
+                df_pol['U1Q11'].mean()+1]
         text='Urban Development & Environmental (U1)'
         fig1 = radar_charts(categories, best, mean, text)
         col1.plotly_chart(fig1, use_container_width=True)
@@ -583,14 +584,14 @@ with tab2:
                       'Climate change mitigation',
                       'Monitoring and evaluation of the climate change mitigation measures']
         best = [4, 4, 4, 4, 4, 4, 4, 4]
-        mean = [df_pol['E1Q1'].mean(), 
-                df_pol['E1Q2'].mean(), 
-                df_pol['E1Q3'].mean(), 
-                df_pol['E1Q4'].mean(),
-                df_pol['E1Q5'].mean(),
-                df_pol['E1Q6'].mean(), 
-                (df['E1Q7'].mean() + df['E1Q8'].mean() + df['E1Q9'].mean() + df['E1Q10'].mean())/4,
-                df['E1Q11'].mean()]
+        mean = [df_pol['E1Q1'].mean()+1, 
+                df_pol['E1Q2'].mean()+1, 
+                df_pol['E1Q3'].mean()+1, 
+                df_pol['E1Q4'].mean()+1,
+                df_pol['E1Q5'].mean()+1,
+                df_pol['E1Q6'].mean()+1, 
+                ((df_pol['E1Q7'].mean() + df_pol['E1Q8'].mean() + df_pol['E1Q9'].mean() + df_pol['E1Q10'].mean())/4)+1,
+                df_pol['E1Q11'].mean()+1]
         text='Urban Development & Environmental (E1)'
         fig2 = radar_charts(categories, best, mean, text)
         col2.plotly_chart(fig2, use_container_width=True)
@@ -638,8 +639,8 @@ with tab2:
             valueBestDimension = [1,1,1,1]
             valueCapturedCompleteness = [(urbanResults['U1S1'][0] + urbanResults['U1S3'][0])/2, 
                                         (urbanResults['U1M1'][0] + urbanResults['U1M2'][0] + urbanResults['U1M4'][0] + urbanResults['U1M5'][0])/4,
-                                        (urbanResults['U1A1'][0] + urbanResults['U1A2'][0] + urbanResults['U1A4'][0])/3,
-                                        (urbanResults['U1R1'][0] + urbanResults['U1R2'][0])/2]
+                                        (urbanResults['U1A1'][0] + urbanResults['U1A2'][0])/2,
+                                        (urbanResults['U1R1'][0])]
             title = 'All Policies - U1'
             fig1 = line_charts(dimension, valueBestDimension, valueCapturedCompleteness, title)
             sec4_col1.plotly_chart(fig1, use_container_width=True)
@@ -661,8 +662,8 @@ with tab2:
             valueBestDimension = [1,1,1,1,1]
             valueCapturedCompleteness = [(urbanResults['U1S1'][0] + urbanResults['U1S3'][0] + urbanResults['E1S1'][0] + urbanResults['E1S3'][0])/4,
                                          (urbanResults['U1M1'][0] + urbanResults['U1M2'][0] + urbanResults['U1M4'][0] + urbanResults['U1M5'][0] + urbanResults['E1M2'][0] + urbanResults['E1M3'][0])/6,
-                                         (urbanResults['U1A1'][0] + urbanResults['U1A2'][0] + urbanResults['U1A4'][0] + urbanResults['E1A1'][0] + urbanResults['E1A2'][0] + urbanResults['E1A3'][0])/6,
-                                         (urbanResults['U1R1'][0] + urbanResults['U1R2'][0] + urbanResults['E1R2'][0] + urbanResults['E1R3'][0] + urbanResults['E1A4'][0])/5,
+                                         (urbanResults['U1A1'][0] + urbanResults['U1A2'][0] + urbanResults['E1A1'][0] + urbanResults['E1A2'][0] + urbanResults['E1A3'][0])/5,
+                                         (urbanResults['U1R1'][0] + urbanResults['E1R2'][0] + urbanResults['E1R3'][0] + urbanResults['E1A4'][0])/4,
                                          urbanResults['E1T1'][0]]
             title = 'All Policies'
             fig1 = line_charts(dimension, valueBestDimension, valueCapturedCompleteness, title)

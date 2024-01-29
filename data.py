@@ -69,18 +69,18 @@
 #                     'E1A4': ['Promote awareness on how the municipality is dealing with the climate change.']})
 
 
-dfL1Best = [4,4,4,4,4]
-dfL2Best = [4,4]
-dfL3Best = [4,4,4,4,4]
-dfL4Best = [4,4,4,4,4,4,4]
+dfL1Best = [3,3,3,3,3]
+dfL2Best = [3,3]
+dfL3Best = [3,3,3,3,3]
+dfL4Best = [3,3,3,3,3,3,3]
 dfP1Best = [5,4,3,4,5,4,4,4]
 dfP2Best = [4,3,3,3,3,3,3,4,5,3,3,3]
 dfI1Best = [4,4,4,4,5,3,4,4,4,3,4,4]
 dfI2Best = [3,3,4,3,4,3,3,3,4,3,3,3,3,3]
 dfC1Best = [4,3,3,4,4,5,3,3,4,4]
 dfC2Best = [4,4,4,4,4,4,4,5]
-dfU1Best = [4,4,4,4,4,4,4,4,4,4,4]
-dfE1Best = [4,4,4,4,4,4,4,4,4,4,4]
+dfU1Best = [3,3,3,3,3,3,3,3,3,3,3]
+dfE1Best = [3,3,3,3,3,3,3,3,3,3,3]
 
 leadershipPoliciesText = ({'L1S1': ['Establish a working team responsible for resilience issues in the city'], 
                     'L1M1': ['Establish a single point of coordination in the city (i.e. resilience department or committee) that facilitates cross-departmental coordination board and procedures'], 
@@ -123,6 +123,7 @@ urbanPoliciesText = ({'U1S1': ['Evaluate and identify adaptation measures.'],
                     'U1M4': ['Update building regulations and standards regularly to consider new or changing risk-related data.'],
                     'U1A4': ['Develop guidelines to integrate resilience concepts in urban planning by various practitioners.'],
                     'U1M5': ['Incorporate sustainable design principles and risk-aware planning approaches to design and implement new buildings, neighbourhoods, and infrastructures.'],
+                    'U1M6': ['Incorporate sustainable design principles and risk-aware planning approaches to design and implement new buildings, neighbourhoods, and infrastructures.'],
                     
                     'E1S1': ['Identify and define important ecosystems and their associated ecosystem services in the municipal area.'],
                     'E1A1': ['Carry out an ecosystem services assessment.'],
