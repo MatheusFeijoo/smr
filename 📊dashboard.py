@@ -99,7 +99,7 @@ def gauge_charts (completeness, text, reference):
     fig = go.Figure(go.Indicator(
         domain = {'x': [0, 1], 'y': [0, 1]},
         value = completeness,
-        mode = "gauge+number",
+        mode = "gauge",
         title = {'text': text},
         delta = {'reference': reference},
         gauge = {'axis': {'range': [None, reference]},
@@ -623,8 +623,8 @@ with tab2:
     with st.expander('Completeness', expanded=True):
         st.subheader('Completeness - Urban Development & Environmental')
 
-        linegraphView = st.selectbox('Select the view - To see the recommendations select "SMART Completeness (All subdimensions)"',
-        ('Policies Completeness ','SMART Completeness (Each subdimension) ','SMART Completeness (All subdimensions) '))
+        linegraphView = st.selectbox('Select the view - To see the recommendations select "SMART Completeness (All subdimensions) + Policies Recommendations"',
+        ('Policies Completeness ','SMART Completeness (Each subdimension) ','SMART Completeness (All subdimensions) + Policies Recommendations '))
 
         if linegraphView == 'Policies Completeness ':
             sec4_col1,sec4_col2 = st.columns([1,1])
