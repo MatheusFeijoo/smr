@@ -624,7 +624,7 @@ with tab2:
         st.subheader('Completeness - Urban Development & Environmental')
 
         linegraphView = st.selectbox('Select the view - To see the recommendations select "SMART Completeness (All subdimensions) + Policies Recommendations"',
-        ('Policies Completeness ','SMART Completeness (Each subdimension) ','SMART Completeness (All subdimensions) + Policies Recommendations '))
+        ('Policies Completeness ','SMART Completeness (Each subdimension) ','SMART Completeness (All subdimensions) + Policies Recommendations'))
 
         if linegraphView == 'Policies Completeness ':
             sec4_col1,sec4_col2 = st.columns([1,1])
@@ -679,7 +679,7 @@ with tab2:
             fig2 = line_charts(dimension, valueBestDimension, valueCapturedCompleteness, title)
             sec4_col2.plotly_chart(fig2, use_container_width=True)
         
-        elif linegraphView == 'SMART Completeness (All subdimensions) ':
+        elif linegraphView == 'SMART Completeness (All subdimensions) + Policies Recommendations':
             dimension = ['Starting','Moderate','Advanced','Robust','Vertebrate']
             valueBestDimension = [1,1,1,1,1]
             valueCapturedCompleteness = [(urbanResults['U1S1'][0] + urbanResults['U1S3'][0] + urbanResults['E1S1'][0] + urbanResults['E1S3'][0])/4,
