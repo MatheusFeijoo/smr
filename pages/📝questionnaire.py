@@ -2,6 +2,20 @@ import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import bigquery
 import time
+from google.oauth2 import service_account
+from google.cloud import bigquery
+import pandas as pd
+
+open_questionnaire = False
+revaluationPeriodsign = False
+revaluationPeriodsign = 0
+city = email = name = None
+
+# Table from BigQuery
+table_answers = "answers.answers"
+
+if "questionnaire_sign" not in st.session_state:
+    st.session_state.questionnaire_sign = False
 
 questionsnanswers = {
                      "L1Q1": ["There is not any organisational structure", 
@@ -187,15 +201,26 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
-# Table from BigQuery
-table_answers = "answers.answers"
+# Perform query.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+@st.cache_data(ttl=600)
+def run_query(query):
+    query_job = client.query(query)
+    rows_raw = query_job.result()
+    rows = [dict(row) for row in rows_raw]
+    return rows
 
-title1, title2 = st.columns((0.11,1)) 
-with title1:
-    st.image('logo_smr.png', width = 120)
-with title2:
-    st.title('SMR Self-Assessment Questionnaire')
+# Returning questions that are already filled
+def returnanswers (question, revaluationPeriod):
+    if revaluationPeriod == 0:
+        indexQuestion = None
+    elif df_answers[question][0] == None:
+        indexQuestion = None
+    else:
+        indexQuestion = int(df_answers[question][0])
+    return indexQuestion
 
+# Checking if the answers are not answered
 def check_null_answers (question, questionsnanswers):
     if question != None:
         answer = questionsnanswers.index(question)
@@ -203,212 +228,313 @@ def check_null_answers (question, questionsnanswers):
         answer = None
     return answer
 
+title1, title2 = st.columns((0.11,1)) 
+with title1:
+    st.image('logo_smr.png', width = 120)
+with title2:
+    st.title('SMR Self-Assessment Questionnaire')
+
 ## Description of the questionnaire
-multi = '''
-To answer this self-assessment questionnaire, you must first complete your personal information.
-After that, you can complete the questionnaire based on the section associated with your expertise and following scale from 1 to 4:
+with st.expander("__Info ❓__"):
+    multi = '''
+    To answer this self-assessment questionnaire, you must first complete your personal information.
+    After that, you can complete the questionnaire based on the section associated with your expertise and following scale from 1 to 4:
 
-1. The policy or action is still not considered.
-2. A plan to implement the action or policy is being developed but is in the initial stage.
-3. The policy/action is monitored to assess the efficiency and impact on the city.
-4. The implementation of the policy or action is completely optimized and continuously improved, which leads to using the resource efficiently.
-'''
-st.markdown(multi)
+    1. The policy or action is still not considered.
+    2. A plan to implement the action or policy is being developed but is in the initial stage.
+    3. The policy/action is monitored to assess the efficiency and impact on the city.
+    4. The implementation of the policy or action is completely optimized and continuously improved, which leads to using the resource efficiently.
+    '''
+    st.markdown(multi)
 
-with st.expander("__Personal Information__"):
-    perinfo1, perinfo2 = st.columns((1,1)) 
-    with perinfo1:
-        credential = st.text_input('Credential')
-        name = st.text_input('Name')
-        email = st.text_input("E-mail")
-        city = st.radio("Select the city to assess",
-                        ["Donostia", "Sevilla", "Valencia"],
-                        horizontal=True,index=None)
-    with perinfo2:
-        professionalRole = st.text_input("Professional Role")
-        yearsOfExperience = st.number_input("Years of Experience", value = 0)
-        mainChallenges = st.text_input('Main Challenges (Separated by commas)')
+## Login system
+with st.expander("__Log In__", expanded=True):
+    # State of the sign and login buttons
+    if 'account' not in st.session_state:
+        st.session_state.account = True
 
+    # SignUp and LogIn buttons
+    div_SignUp, div_LogIn = st.columns((0.2,1))
+    with div_SignUp:
+        signin = st.button('Sign up')
+        if signin:
+            st.session_state.account = True
+    with div_LogIn:
+        login = st.button('Log in')
+        if login:
+            st.session_state.account = False
 
-with st.expander("__Questionnaire__"):
-
-    tab1, tab2, tab3 = st.tabs(["Leadership", 'Urban Development', 'Environmental'])
-
-    with tab1:
-        L1, L2, L3, L4 = st.tabs(["Leadership Part 1", 'Leadership Part 2', 'Leadership Part 3', "Leadership Part 4"])
+    # SignUp form
+    if st.session_state.account == True:
+        perinfo1, perinfo2 = st.columns((1,1))
+        with perinfo1:
+            credential = st.text_input('Credential')
+            name = st.text_input('Name')
+            email = st.text_input("E-mail")
+            city = st.radio("Select the city to assess",
+                            ["Donostia", "Sevilla", "Valencia"],
+                            horizontal=True,index=None)
+        with perinfo2:
+            professionalRole = st.text_input("Professional Role")
+            yearsOfExperience = st.number_input("Years of Experience", value = 0)
+            mainChallenges = st.text_input('Main Challenges (Separated by commas)')
+            password = st.text_input("Password")
         
-        with L1:
-            L1Q1 = st.radio("What type of structure has the city got to govern resilience?", questionsnanswers['L1Q1'], index=None)
-            L1Q1 = check_null_answers(L1Q1, questionsnanswers['L1Q1'])
+        ## Combining the data for the user_info table
+        table_user_info = "answers.user_info"
+        row_to_insert_user_info = [{"name": name,
+                        "email": email,
+                        "city": city,
+                        "professional_role": professionalRole,
+                        "years_of_experience": yearsOfExperience,
+                        "main_challenges": mainChallenges,
+                        "password": password}]  
 
-            L1Q2 = st.radio( "Has the municipality developed a RAP?", questionsnanswers["L1Q2"], index=None)
-            L1Q2 = check_null_answers(L1Q2, questionsnanswers['L1Q2'])
+        signup_button = st.button("Create your account")
+        if signup_button:
+            df_answers = pd.DataFrame
+            st.session_state.questionnaire_sign = True
+            revaluationPeriod = "0"
+            revaluationPeriodsign = False
+            open_questionnaire = True
+            if name!=None:
+                if credential != "0000":
+                    st.warning("Your credential is not correct, please insert the correct credential")
+                elif name == "":
+                    st.warning("Your name is empty")
+                elif email == "":
+                    st.warning("Your email is empty")
+                elif city == "":
+                    st.warning("Your city is empty")
+                elif professionalRole == "":
+                    st.warning("Your professional role is empty")
+                elif yearsOfExperience == "":
+                    st.warning("Your year of experience is empty")
+                elif mainChallenges == "":
+                    st.warning("Your main challenges is empty")
+                elif password == "":
+                    st.warning("Your password is empty")
+                else:
+                    errors_user = client.insert_rows_json(table_user_info, row_to_insert_user_info)  # Make an API request.
+                    if errors_user == []:
+                        st.success('Your account was created was submitted!', icon="✅")
+                    else:
+                        print("Encountered errors while inserting rows: {}".format(errors_user))
 
-            L1Q3 = st.radio("Is the resilience action plan (RAP) integrated with other plans/strategies?", questionsnanswers["L1Q3"], index=None)
-            L1Q3 = check_null_answers(L1Q3, questionsnanswers['L1Q3'])
+
+    # LogIn form
+    if st.session_state.account == False:
+        # Login submit button state
+        if 'login' not in st.session_state:
+            st.session_state.login = 0
+
+        # Email, password and login button
+        email = st.text_input("E-mail", None)
+        # Include password in the database
+        password = st.text_input("Password", None)
+        check_login = st.button('Log in  ')
+        if check_login:
+            st.session_state.login += 1
+            st.session_state.questionnaire_sign = True
+
+        # Extracting info from the database
+        if st.session_state.login > 0:
+            if email == "":
+                st.warning("Please insert the email and password")
+            else:
+                rows = run_query("SELECT * FROM `answers.user_info`")
+                df_bigquery = pd.DataFrame(rows)    
+                df_user = df_bigquery.loc[df_bigquery['email'] == email]
+                st.session_state.login = 1
+                if df_user.empty:
+                    st.warning("Incorrect email or password")
+                else:    
+                    id = df_user.index.tolist()
+                    id = id[0]
+                    credential = "0000"
+                    name = df_user['name'][id]
+                    email = df_user['email'][id]
+                    city = df_user['city'][id]
+                    professionalRole = df_user['professional_role'][id]
+                    yearsOfExperience = df_user['years_of_experience'][id]
+                    mainChallenges = df_user['main_challenges'][id]
+                    revaluationPeriodsign = True
+                    open_questionnaire = True
+
+# Questionnaire
+if st.session_state.questionnaire_sign == True:
+    with st.expander('Questionnaire'):
+        # Extracting the answered options and selecting the revaluation period
+        if revaluationPeriodsign == True:
+            rows = run_query("SELECT * FROM `answers.answers`")
+            df_bigquery_answers = pd.DataFrame(rows)
+            df_answers = df_bigquery_answers.loc[df_bigquery_answers['email'] == email].reset_index()
+            df_answers['revaluation_period'] = df_answers['revaluation_period'].astype(str).astype(int)
+            max_period = (df_answers['revaluation_period'].max())
+            st.write("Your current period of analysis is: ", max_period, "months")
+            df_answers = df_answers.loc[df_answers['revaluation_period'] == max_period].reset_index()
             
-            L1Q4 = st.radio("Does the city promote access to basic services for vulnerable groups?", questionsnanswers["L1Q4"], index=None)
-            L1Q4 = check_null_answers(L1Q4, questionsnanswers['L1Q4'])
+            whichRound = st.select_slider('What is the current revaluation period for this city?', options=['6 months', '12 months', '18 months', '24 months'])
+            match whichRound:
+                    case "6 months": revaluationPeriod = "6"
+                    case "12 months": revaluationPeriod = "12"
+                    case "18 months": revaluationPeriod = "18"
+                    case "24 months": revaluationPeriod = "24"
+                    case _: print("error")
+        else:
+            revaluationPeriod = 0
 
-            L1Q5 = st.radio("Does the city support other cities in the development of resilience plans?",questionsnanswers["L1Q5"], index=None)
-            L1Q5 = check_null_answers(L1Q5, questionsnanswers['L1Q5'])
+        leadership, urbandev, environmental = st.tabs(["Leadership", 'Urban Development', 'Environmental'])
 
-        with L2:
-            L2Q1 = st.radio("Have the resilience processes/procedures adopted any standards?", questionsnanswers["L2Q1"], index=None)
-            L2Q1 = check_null_answers(L2Q1, questionsnanswers['L2Q1'])
+        with leadership:
+            L1, L2, L3, L4 = st.tabs(["Leadership Part 1", 'Leadership Part 2', 'Leadership Part 3', "Leadership Part 4"])
             
-            L2Q2 = st.radio("Is the resilience process submitted to any certification bodies to ensure conromity", questionsnanswers["L2Q2"], index=None)
-            L2Q2 = check_null_answers(L2Q2, questionsnanswers['L2Q2'])
+            with L1:
+                L1Q1 = st.radio("What type of structure has the city got to govern resilience?", questionsnanswers['L1Q1'], index=returnanswers('L1Q1', revaluationPeriod))
+                L1Q1 = check_null_answers(L1Q1, questionsnanswers['L1Q1'])
 
-        with L3:
-            L3Q1 = st.radio("To what extent is the resilience culture* developed in the city? *A resilience culture enables the organization to anticipate, prepare for, adapt to any disruption and emerge stroger.", questionsnanswers["L3Q1"], index=None)
-            L3Q1 = check_null_answers(L3Q1, questionsnanswers['L3Q1'])
+                L1Q2 = st.radio( "Has the municipality developed a RAP?", questionsnanswers["L1Q2"], index=returnanswers('L1Q2',revaluationPeriod))
+                L1Q2 = check_null_answers(L1Q2, questionsnanswers['L1Q2'])
 
-            L3Q2 = st.radio("To what extent are past events analysed to extract lessons learned?", questionsnanswers["L3Q2"], index=None)
-            L3Q2 = check_null_answers(L3Q2, questionsnanswers['L3Q2'])
+                L1Q3 = st.radio("Is the resilience action plan (RAP) integrated with other plans/strategies?", questionsnanswers["L1Q3"], index=returnanswers('L1Q3',revaluationPeriod))
+                L1Q3 = check_null_answers(L1Q3, questionsnanswers['L1Q3'])
+                
+                L1Q4 = st.radio("Does the city promote access to basic services for vulnerable groups?", questionsnanswers["L1Q4"], index=returnanswers('L1Q4',revaluationPeriod))
+                L1Q4 = check_null_answers(L1Q4, questionsnanswers['L1Q4'])
 
-            L3Q3 = st.radio("There is no knowledge sharing with other cities.", questionsnanswers["L3Q3"], index=None)
-            L3Q3 = check_null_answers(L3Q3, questionsnanswers['L3Q3'])
+                L1Q5 = st.radio("Does the city support other cities in the development of resilience plans?",questionsnanswers["L1Q5"], index=returnanswers('L1Q5',revaluationPeriod))
+                L1Q5 = check_null_answers(L1Q5, questionsnanswers['L1Q5'])
 
-            L3Q4 = st.radio("How is the learning process from past events?", questionsnanswers["L3Q4"], index=None)
-            L3Q4 = check_null_answers(L3Q4, questionsnanswers['L3Q4'])
+            with L2:
+                L2Q1 = st.radio("Have the resilience processes/procedures adopted any standards?", questionsnanswers["L2Q1"], index=returnanswers('L2Q1',revaluationPeriod))
+                L2Q1 = check_null_answers(L2Q1, questionsnanswers['L2Q1'])
+                
+                L2Q2 = st.radio("Is the resilience process submitted to any certification bodies to ensure conromity", questionsnanswers["L2Q2"], index=returnanswers('L2Q2',revaluationPeriod))
+                L2Q2 = check_null_answers(L2Q2, questionsnanswers['L2Q2'])
 
-            L3Q5 = st.radio("Are there formal actions or procedures (meetings, committees) to assess the effectiveness of the learning process?", questionsnanswers["L3Q5"], index=None)
-            L3Q5 = check_null_answers(L3Q5, questionsnanswers['L3Q5'])
+            with L3:
+                L3Q1 = st.radio("To what extent is the resilience culture* developed in the city? *A resilience culture enables the organization to anticipate, prepare for, adapt to any disruption and emerge stroger.", questionsnanswers["L3Q1"], index=returnanswers('L3Q1',revaluationPeriod))
+                L3Q1 = check_null_answers(L3Q1, questionsnanswers['L3Q1'])
 
-        with L4:
-            L4Q1 = st.radio("Which is the level of development of the disaster response plan*? *A disaster emergency response plan, or disaster response plan, is a written policy accompanied by procedures that defines the response activities to minimize damage resulting from disasters (man-made or natural)", questionsnanswers["L4Q1"], index=None)
-            L4Q1 = check_null_answers(L4Q1, questionsnanswers['L4Q1'])
+                L3Q2 = st.radio("To what extent are past events analysed to extract lessons learned?", questionsnanswers["L3Q2"], index=returnanswers('L3Q2',revaluationPeriod))
+                L3Q2 = check_null_answers(L3Q2, questionsnanswers['L3Q2'])
 
-            L4Q2 = st.radio("To what extent is the RAP developed?", questionsnanswers["L4Q2"], index=None)
-            L4Q2 = check_null_answers(L4Q2, questionsnanswers['L4Q2'])
+                L3Q3 = st.radio("There is no knowledge sharing with other cities.", questionsnanswers["L3Q3"], index=returnanswers('L3Q3',revaluationPeriod))
+                L3Q3 = check_null_answers(L3Q3, questionsnanswers['L3Q3'])
 
-            L4Q3 = st.radio("Which group of stakeholders collaborate in the RAP development?", questionsnanswers["L4Q3"], index=None)
-            L4Q3 = check_null_answers(L4Q3, questionsnanswers['L4Q3'])
+                L3Q4 = st.radio("How is the learning process from past events?", questionsnanswers["L3Q4"], index=returnanswers('L3Q4',revaluationPeriod))
+                L3Q4 = check_null_answers(L3Q4, questionsnanswers['L3Q4'])
 
-            L4Q4 = st.radio("What types of events are addressed in the RAP?", questionsnanswers["L4Q4"], index=None)
-            L4Q4 = check_null_answers(L4Q4, questionsnanswers['L4Q4'])
+                L3Q5 = st.radio("Are there formal actions or procedures (meetings, committees) to assess the effectiveness of the learning process?", questionsnanswers["L3Q5"], index=returnanswers('L3Q5',revaluationPeriod))
+                L3Q5 = check_null_answers(L3Q5, questionsnanswers['L3Q5'])
 
-            L4Q5 = st.radio("Does the RAP address Climate Change perspective?", questionsnanswers["L4Q5"], index=None)
-            L4Q5 = check_null_answers(L4Q5, questionsnanswers['L4Q5'])
+            with L4:
+                L4Q1 = st.radio("Which is the level of development of the disaster response plan*? *A disaster emergency response plan, or disaster response plan, is a written policy accompanied by procedures that defines the response activities to minimize damage resulting from disasters (man-made or natural)", questionsnanswers["L4Q1"], index=returnanswers('L4Q1',revaluationPeriod))
+                L4Q1 = check_null_answers(L4Q1, questionsnanswers['L4Q1'])
 
-            L4Q6 = st.radio("Is the resilience perspective adopted and integrated into other key city functions?", questionsnanswers["L4Q6"], index=None)
-            L4Q6 = check_null_answers(L4Q6, questionsnanswers['L4Q6'])
+                L4Q2 = st.radio("To what extent is the RAP developed?", questionsnanswers["L4Q2"], index=returnanswers('L4Q2',revaluationPeriod))
+                L4Q2 = check_null_answers(L4Q2, questionsnanswers['L4Q2'])
 
-            L4Q7 = st.radio("Does the city collaborate with other cities and external bodies?", questionsnanswers["L4Q7"], index=None)
-            L4Q7 = check_null_answers(L4Q7, questionsnanswers['L4Q7'])
+                L4Q3 = st.radio("Which group of stakeholders collaborate in the RAP development?", questionsnanswers["L4Q3"], index=returnanswers('L4Q3',revaluationPeriod))
+                L4Q3 = check_null_answers(L4Q3, questionsnanswers['L4Q3'])
 
-    with tab2:
-        U1Q1 = st.radio("Are the climate adaptation measures identified in urban planning?", questionsnanswers["U1Q1"], index=None)
-        U1Q1 = check_null_answers(U1Q1, questionsnanswers['U1Q1'])
+                L4Q4 = st.radio("What types of events are addressed in the RAP?", questionsnanswers["L4Q4"], index=returnanswers('L4Q4',revaluationPeriod))
+                L4Q4 = check_null_answers(L4Q4, questionsnanswers['L4Q4'])
 
-        U1Q2 = st.radio("Are the climate adaptation measures identified in urban development?", questionsnanswers["U1Q2"], index=None)
-        U1Q2 = check_null_answers(U1Q2, questionsnanswers['U1Q2'])
+                L4Q5 = st.radio("Does the RAP address Climate Change perspective?", questionsnanswers["L4Q5"], index=returnanswers('L4Q5',revaluationPeriod))
+                L4Q5 = check_null_answers(L4Q5, questionsnanswers['L4Q5'])
+
+                L4Q6 = st.radio("Is the resilience perspective adopted and integrated into other key city functions?", questionsnanswers["L4Q6"], index=returnanswers('L4Q6',revaluationPeriod))
+                L4Q6 = check_null_answers(L4Q6, questionsnanswers['L4Q6'])
+
+                L4Q7 = st.radio("Does the city collaborate with other cities and external bodies?", questionsnanswers["L4Q7"], index=returnanswers('L4Q7',revaluationPeriod))
+                L4Q7 = check_null_answers(L4Q7, questionsnanswers['L4Q7'])
+
+        with urbandev:
+            U1Q1 = st.radio("Are the climate adaptation measures identified in urban planning?", questionsnanswers["U1Q1"], index=returnanswers('U1Q1',revaluationPeriod))
+            U1Q1 = check_null_answers(U1Q1, questionsnanswers['U1Q1'])
+
+            U1Q2 = st.radio("Are the climate adaptation measures identified in urban development?", questionsnanswers["U1Q2"], index=returnanswers('U1Q2',revaluationPeriod))
+            U1Q2 = check_null_answers(U1Q2, questionsnanswers['U1Q2'])
+            
+            U1Q3 = st.radio("Has the city developed and/or implemented Plan for Climate Change Actions (PACES) to favor implementing measures for climate change adaptation?", questionsnanswers["U1Q3"], index=returnanswers('U1Q3',revaluationPeriod))
+            U1Q3 = check_null_answers(U1Q3, questionsnanswers['U1Q3'])
+            
+            U1Q4 = st.radio("Does your city monitor and evaluate the effectiveness of already implemented climate change adaptation measures?", questionsnanswers["U1Q4"], index=returnanswers('U1Q4',revaluationPeriod))
+            U1Q4 = check_null_answers(U1Q4, questionsnanswers['U1Q4'])
+            
+            U1Q5 = st.radio("Does your city identify potential Nature-Based solutions (NBS) for improving urban resilience?", questionsnanswers["U1Q5"], index=returnanswers('U1Q5',revaluationPeriod))
+            U1Q5 = check_null_answers(U1Q5, questionsnanswers['U1Q5'])
+            
+            U1Q6 = st.radio("Does your city implement Nature-Based solutions (NBS) for improving urban resilience?", questionsnanswers["U1Q6"], index=returnanswers('U1Q6',revaluationPeriod))
+            U1Q6 = check_null_answers(U1Q6, questionsnanswers['U1Q6'])    
+            
+            U1Q7 = st.radio("What type of climate information is provided to supportinformed decision-making? Mark all that apply.", questionsnanswers["U1Q7"], index=returnanswers('U1Q7',revaluationPeriod))
+            U1Q7 = check_null_answers(U1Q7, questionsnanswers['U1Q7'])    
+            
+            U1Q8 = st.radio("Are there appropriate regulations and standards for sustainable and resilient urban planning?", questionsnanswers["U1Q8"], index=returnanswers('U1Q8',revaluationPeriod))
+            U1Q8 = check_null_answers(U1Q8, questionsnanswers['U1Q8'])    
+            
+            U1Q9 = st.radio("Are there guidelines for sustainable and resilient urban planning?", questionsnanswers["U1Q9"], index=returnanswers('U1Q9',revaluationPeriod))
+            U1Q9 = check_null_answers(U1Q9, questionsnanswers['U1Q9'])    
+            
+            U1Q10 = st.radio("Does the city implement sustainable design principles and risk reduction measures in new buildings and rehabilitation of buildings?", questionsnanswers["U1Q10"], index=returnanswers('U1Q10',revaluationPeriod))
+            U1Q10 = check_null_answers(U1Q10, questionsnanswers['U1Q10'])
+
+            U1Q11 = st.radio("Does the cityimplement sustainable principles when designing the urban mobility and public services?", questionsnanswers["U1Q11"], index=returnanswers('U1Q11',revaluationPeriod))
+            U1Q11 = check_null_answers(U1Q11, questionsnanswers['U1Q11'])
+
+        with environmental:
+
+            E1Q1 = st.radio("Is there any assessment of the ecosystem and the biodiversity over time? How broad is the assessment?", questionsnanswers["E1Q1"], index=returnanswers('E1Q1',revaluationPeriod))
+            E1Q1 = check_null_answers(E1Q1, questionsnanswers['E1Q1'])
         
-        U1Q3 = st.radio("Has the city developed and/or implemented Plan for Climate Change Actions (PACES) to favor implementing measures for climate change adaptation?", questionsnanswers["U1Q3"], index=None)
-        U1Q3 = check_null_answers(U1Q3, questionsnanswers['U1Q3'])
-        
-        U1Q4 = st.radio("Does your city monitor and evaluate the effectiveness of already implemented climate change adaptation measures?", questionsnanswers["U1Q4"], index=None)
-        U1Q4 = check_null_answers(U1Q4, questionsnanswers['U1Q4'])
-        
-        U1Q5 = st.radio("Does your city identify potential Nature-Based solutions (NBS) for improving urban resilience?", questionsnanswers["U1Q5"], index=None)
-        U1Q5 = check_null_answers(U1Q5, questionsnanswers['U1Q5'])
-        
-        U1Q6 = st.radio("Does your city implement Nature-Based solutions (NBS) for improving urban resilience?", questionsnanswers["U1Q6"], index=None)
-        U1Q6 = check_null_answers(U1Q6, questionsnanswers['U1Q6'])    
-        
-        U1Q7 = st.radio("What type of climate information is provided to supportinformed decision-making? Mark all that apply.", questionsnanswers["U1Q7"], index=None)
-        U1Q7 = check_null_answers(U1Q7, questionsnanswers['U1Q7'])    
-        
-        U1Q8 = st.radio("Are there appropriate regulations and standards for sustainable and resilient urban planning?", questionsnanswers["U1Q8"], index=None)
-        U1Q8 = check_null_answers(U1Q8, questionsnanswers['U1Q8'])    
-        
-        U1Q9 = st.radio("Are there guidelines for sustainable and resilient urban planning?", questionsnanswers["U1Q9"], index=None)
-        U1Q9 = check_null_answers(U1Q9, questionsnanswers['U1Q9'])    
-        
-        U1Q10 = st.radio("Does the city implement sustainable design principles and risk reduction measures in new buildings and rehabilitation of buildings?", questionsnanswers["U1Q10"], index=None)
-        U1Q10 = check_null_answers(U1Q10, questionsnanswers['U1Q10'])
+            E1Q2 = st.radio("Does the city provide information about the role of ecosystems in disaster resilience?", questionsnanswers["E1Q2"], index=returnanswers('E1Q2',revaluationPeriod))
+            E1Q2 = check_null_answers(E1Q2, questionsnanswers['E1Q2'])    
 
-        U1Q11 = st.radio("Does the cityimplement sustainable principles when designing the urban mobility and public services?", questionsnanswers["U1Q11"], index=None)
-        U1Q11 = check_null_answers(U1Q11, questionsnanswers['U1Q11'])
+            E1Q3 = st.radio("Are there agreements and collaborations with border cities to develop and promote joint actions on transboundary ecosystems?", questionsnanswers["E1Q3"], index=returnanswers('E1Q3',revaluationPeriod))
+            E1Q3 = check_null_answers(E1Q3, questionsnanswers['E1Q3'])   
 
-    with tab3:
+            E1Q4 = st.radio("Does the city protect or enhance important ecosystems?", questionsnanswers["E1Q4"], index=returnanswers('E1Q4',revaluationPeriod))
+            E1Q4 = check_null_answers(E1Q4, questionsnanswers['E1Q4'])   
 
-        E1Q1 = st.radio("Is there any assessment of the ecosystem and the biodiversity over time? How broad is the assessment?", questionsnanswers["E1Q1"], index=None)
-        E1Q1 = check_null_answers(E1Q1, questionsnanswers['E1Q1'])
-    
-        E1Q2 = st.radio("Does the city provide information about the role of ecosystems in disaster resilience?", questionsnanswers["E1Q2"], index=None)
-        E1Q2 = check_null_answers(E1Q2, questionsnanswers['E1Q2'])    
+            E1Q5 = st.radio("Are there any mitigation targets for GHG reduction?", questionsnanswers["E1Q5"], index=returnanswers('E1Q5',revaluationPeriod))
+            E1Q5 = check_null_answers(E1Q5, questionsnanswers['E1Q5'])    
 
-        E1Q3 = st.radio("Are there agreements and collaborations with border cities to develop and promote joint actions on transboundary ecosystems?", questionsnanswers["E1Q3"], index=None)
-        E1Q3 = check_null_answers(E1Q3, questionsnanswers['E1Q3'])   
+            E1Q6 = st.radio("Has the city developed and/or implemented Plan for Climate Change Actions (PACES) to favor implementing actions for climate change mitigation?", questionsnanswers["E1Q6"], index=returnanswers('E1Q6',revaluationPeriod))
+            E1Q6 = check_null_answers(E1Q6, questionsnanswers['E1Q6'])    
 
-        E1Q4 = st.radio("Does the city protect or enhance important ecosystems?", questionsnanswers["E1Q4"], index=None)
-        E1Q4 = check_null_answers(E1Q4, questionsnanswers['E1Q4'])   
+            E1Q7 = st.radio("Which of these measures has the city implemented for climate change mitigation? (Awareness campaigns to reduce energy consumption)", questionsnanswers["E1Q7"], index=returnanswers('E1Q7',revaluationPeriod))
+            E1Q7 = check_null_answers(E1Q7, questionsnanswers['E1Q7'])    
 
-        E1Q5 = st.radio("Are there any mitigation targets for GHG reduction?", questionsnanswers["E1Q5"], index=None)
-        E1Q5 = check_null_answers(E1Q5, questionsnanswers['E1Q5'])    
+            E1Q8 = st.radio("Which of these measures has the city implemented for climate change mitigation? (Promotion of renewable energies)", questionsnanswers["E1Q8"], index=returnanswers('E1Q8',revaluationPeriod))
+            E1Q8 = check_null_answers(E1Q8, questionsnanswers['E1Q8'])   
 
-        E1Q6 = st.radio("Has the city developed and/or implemented Plan for Climate Change Actions (PACES) to favor implementing actions for climate change mitigation?", questionsnanswers["E1Q6"], index=None)
-        E1Q6 = check_null_answers(E1Q6, questionsnanswers['E1Q6'])    
+            E1Q9 = st.radio("Which of these measures has the city implemented for climate change mitigation? (Promotion of sustainable transport (i.e. electric cars, public transport, bikes…,revaluationPeriod))", questionsnanswers["E1Q9"], index=returnanswers('E1Q9',revaluationPeriod))
+            E1Q9 = check_null_answers(E1Q9, questionsnanswers['E1Q9']) 
 
-        E1Q7 = st.radio("Which of these measures has the city implemented for climate change mitigation? (Awareness campaigns to reduce energy consumption)", questionsnanswers["E1Q7"], index=None)
-        E1Q7 = check_null_answers(E1Q7, questionsnanswers['E1Q7'])    
+            E1Q10 = st.radio("Which of these measures has the city implemented for climate change mitigation? (Promotion of climate change awareness campaigns)", questionsnanswers["E1Q10"], index=returnanswers('E1Q10',revaluationPeriod))
+            E1Q10= check_null_answers(E1Q10, questionsnanswers['E1Q10'])    
 
-        E1Q8 = st.radio("Which of these measures has the city implemented for climate change mitigation? (Promotion of renewable energies)", questionsnanswers["E1Q8"], index=None)
-        E1Q8 = check_null_answers(E1Q8, questionsnanswers['E1Q8'])   
-
-        E1Q9 = st.radio("Which of these measures has the city implemented for climate change mitigation? (Promotion of sustainable transport (i.e. electric cars, public transport, bikes…))", questionsnanswers["E1Q9"], index=None)
-        E1Q9 = check_null_answers(E1Q9, questionsnanswers['E1Q9']) 
-
-        E1Q10 = st.radio("Which of these measures has the city implemented for climate change mitigation? (Promotion of climate change awareness campaigns)", questionsnanswers["E1Q10"], index=None)
-        E1Q10= check_null_answers(E1Q10, questionsnanswers['E1Q10'])    
-
-        E1Q11 = st.radio("Does your city monitor and evaluate the effectiveness of already implemented climate change mitigation measures? Promotion of sustainable transport (i.e. electric cars, public transport, bikes…)", questionsnanswers["E1Q11"], index=None)
-        E1Q11 = check_null_answers(E1Q11, questionsnanswers['E1Q11'])    
+            E1Q11 = st.radio("Does your city monitor and evaluate the effectiveness of already implemented climate change mitigation measures? Promotion of sustainable transport (i.e. electric cars, public transport, bikes…)", questionsnanswers["E1Q11"], index=returnanswers('E1Q11',revaluationPeriod))
+            E1Q11 = check_null_answers(E1Q11, questionsnanswers['E1Q11'])    
 
 
-## Combining the data for the user_info table
-table_user_info = "answers.user_info"
-row_to_insert_user_info = [{"name": name,
-                  "email": email,
-                  "city": city,
-                  "professional_role": professionalRole,
-                  "years_of_experience": yearsOfExperience,
-                  "main_challenges": mainChallenges}]
+    ## Combining the data for the answer_table
+    table_answers = "answers.answers"
+    row_to_insert_answers =[{"email":email, "city":city, 
+                            "L1Q1":L1Q1,"L1Q2":L1Q2,"L1Q3":L1Q3,"L1Q4":L1Q4,"L1Q5":L1Q5,
+                            "L2Q1":L2Q1,"L2Q2":L2Q2,
+                            "L3Q1":L3Q1,"L3Q2":L3Q2,"L3Q3":L3Q3,"L3Q4":L3Q4,"L3Q5":L3Q5,
+                            "L4Q1":L4Q1,"L4Q2":L4Q2,"L4Q3":L4Q3,"L4Q4":L4Q4,"L4Q5":L4Q5, "L4Q6":L4Q6, "L4Q7":L4Q7,
+                            "U1Q1":U1Q1,"U1Q2":U1Q2,"U1Q3":U1Q3,"U1Q4":U1Q4,"U1Q5":U1Q5,"U1Q6":U1Q6,"U1Q7":U1Q7,"U1Q8":U1Q8,"U1Q9":U1Q9,"U1Q10":U1Q10,"U1Q11":U1Q11,
+                            "E1Q1":E1Q1,"E1Q2":E1Q2,"E1Q3":E1Q3,"E1Q4":E1Q4,"E1Q5":E1Q5,"E1Q6":E1Q6,"E1Q7":E1Q7,"E1Q8":E1Q8,"E1Q9":E1Q9,"E1Q10":E1Q10,"E1Q11":E1Q11,
+                            "revaluation_period": revaluationPeriod
+                            }]
 
-## Combining the data for the answer_table
-table_answers = "answers.answers"
-row_to_insert_answers =[{"email":email, "city":city, 
-                         "L1Q1":L1Q1,"L1Q2":L1Q2,"L1Q3":L1Q3,"L1Q4":L1Q4,"L1Q5":L1Q5,
-                         "L2Q1":L2Q1,"L2Q2":L2Q2,
-                         "L3Q1":L3Q1,"L3Q2":L3Q2,"L3Q3":L3Q3,"L3Q4":L3Q4,"L3Q5":L3Q5,
-                         "L4Q1":L4Q1,"L4Q2":L4Q2,"L4Q3":L4Q3,"L4Q4":L4Q4,"L4Q5":L4Q5, "L4Q6":L4Q6, "L4Q7":L4Q7,
-                         "U1Q1":U1Q1,"U1Q2":U1Q2,"U1Q3":U1Q3,"U1Q4":U1Q4,"U1Q5":U1Q5,"U1Q6":U1Q6,"U1Q7":U1Q7,"U1Q8":U1Q8,"U1Q9":U1Q9,"U1Q10":U1Q10,"U1Q11":U1Q11,
-                         "E1Q1":E1Q1,"E1Q2":E1Q2,"E1Q3":E1Q3,"E1Q4":E1Q4,"E1Q5":E1Q5,"E1Q6":E1Q6,"E1Q7":E1Q7,"E1Q8":E1Q8,"E1Q9":E1Q9,"E1Q10":E1Q10,"E1Q11":E1Q11}]
-
-if st.session_state.get("but_c", False):
-    st.session_state.disabled = True
-
-if credential != "0000":
-    st.warning("Your credential is not correct, please insert the correct credential")
-elif name == "":
-    st.warning("Your name is empty, please fill before submitting the questionnaire")
-elif email == "":
-    st.warning("Your email is empty, please fill before submitting the questionnaire")
-elif city == "":
-    st.warning("Your city is empty, please fill before submitting the questionnaire")
-elif professionalRole == "":
-    st.warning("Your professional role is empty, please fill before submitting the questionnaire")
-elif yearsOfExperience == "":
-    st.warning("Your year of experience is empty, please fill before submitting the questionnaire")
-elif mainChallenges == "":
-    st.warning("Your main challenges is empty, please fill before submitting the questionnaire")
-else:
     if st.button('Submit Questionnaire', key='but_c', disabled=st.session_state.get("disabled", False)):
-        errors_user = client.insert_rows_json(table_user_info, row_to_insert_user_info)  # Make an API request.
         errors = client.insert_rows_json(table_answers, row_to_insert_answers)
-        if errors == [] or errors_user == []:
+        if errors == []:
             progress_text = "Questionnaire submission in progress. Please wait."
             my_bar = st.progress(0, text=progress_text)
             for percent_complete in range(100):
@@ -419,4 +545,3 @@ else:
             st.success('Your questionnaire was submitted!', icon="✅")
         else:
             print("Encountered errors while inserting rows: {}".format(errors))
-        

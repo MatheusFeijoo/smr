@@ -50,4 +50,5 @@ urbanResults = ({   'U1S1': ['Evaluate and identify adaptation measures.'],
                     'E1M3': ['Establish the legal context and the financial and technical resources.'],
                     'E1A3': ['Encourage policies and actions to deal with climate change issues 'Reduce energy demand, renewable energies, sustainable mobility.'],
                     'E1R3': ['Conduct periodic monitoring and evaluation of mitigation measures’ effectiveness.'],
+                    'U1S4': ['Promote awareness on how the municipality is dealing with the climate change.'],
                     'E1A4': ['Promote awareness on how the municipality is dealing with the climate change.']})

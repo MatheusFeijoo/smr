@@ -3,7 +3,7 @@ import streamlit as st
 
 
 def Leadership(df_pol, dfL1Best, dfL2Best, dfL3Best, dfL4Best):
-    
+
     L1S1 = (((df_pol['L1Q1'])/(data.dfL1Best[0]-2)>=1 and (1,) or (0,))[0])
     L1M1 = (((df_pol['L1Q1'])/(data.dfL1Best[0]-2)>=1 and (((df_pol['L1Q1']-1)/(data.dfL1Best[0]-2)<1 and ((df_pol['L1Q1'])/(data.dfL1Best[0]-1),) or (1,))[0],) or (0,))[0])
     L1A1 = (((df_pol['L1Q1'])/(data.dfL1Best[0]-2)>=1 and ((df_pol['L1Q1'])/(data.dfL1Best[0]),) or (0,))[0])
