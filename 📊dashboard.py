@@ -789,8 +789,9 @@ with tab2:
             else:
                 valueCapturedCompleteness_prevU1 = valueCapturedCompleteness_prevE1 = 0
             sec4_col1,sec4_col2 = st.columns([1,1])
+
             ## LINE GRAPH U1
-            dimension = ['U1S1', 'U1M1', 'U1A1', 'U1R1', 'U1M2', 'U1A2', 'U1S3', 'U1M3', 'U1S4', 'U1M4', 'U1M5', 'U1M6']
+            dimension = ['U1S1', 'U1S3', 'U1S4', 'U1M1', 'U1M2', 'U1M3', 'U1M4', 'U1M5', 'U1M6', 'U1A1', 'U1A2', 'U1R1']
             valueBestDimension = [1,1,1,1,1,1,1,1,1,1,1,1]
             valueCapturedCompleteness = [urbanResults['U1S1'][0], urbanResults['U1S3'][0], urbanResults['U1S4'][0],
                                         urbanResults['U1M1'][0], urbanResults['U1M2'][0], urbanResults['U1M3'][0], urbanResults['U1M4'][0], urbanResults['U1M5'][0], urbanResults['U1M6'][0],
@@ -801,7 +802,7 @@ with tab2:
             sec4_col1.plotly_chart(fig1, use_container_width=True)
 
             ## LINE GRAPH E1
-            dimension = ['E1S1', 'E1A1', 'E1T1', 'E1M2', 'E1A2', 'E1R2', 'E1S3', 'E1M3', 'E1A3', 'E1R3', 'E1A4']
+            dimension = ['E1S1', 'E1S3', 'E1M2', 'E1M3', 'E1A1', 'E1A2', 'E1A3', 'E1R2', 'E1R3', 'E1A4', 'E1T1']
             valueBestDimension = [1,1,1,1,1,1,1,1,1,1,1]
             valueCapturedCompleteness = [urbanResults['E1S1'][0], urbanResults['E1S3'][0],
                                          urbanResults['E1M2'][0], urbanResults['E1M3'][0],

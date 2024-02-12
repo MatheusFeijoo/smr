@@ -75,35 +75,34 @@ def Cooperation (df_pol, dfC1Best, dfC2Best):
 
 def Urban (df_pol, dfU1Best, dfE1Best):
     #U1
-    U1Q1Q2MEAN = (df_pol[0]['U1Q1'] + df_pol[0]['U1Q2'])/2
-    U1S1 = (U1Q1Q2MEAN>1 and ((U1Q1Q2MEAN-1)/(data.dfU1Best[0]-1),) or (0,))[0]
-    U1M1 = (U1S1>=0.75 and ((((df_pol[0]['U1Q3'])/(data.dfU1Best[0]-2)>=1 and (((df_pol[0]['U1Q3']-1)/(data.dfU1Best[0]-2)<1 and ((df_pol[0]['U1Q3']-1)/(data.dfU1Best[0]-2),) or (1,))[0],) or (0,))[0])))
-    U1A1 = (U1M1>=0.75 and (((df_pol[0]['U1Q3']>1 and ((df_pol[0]['U1Q3']-1)/(data.dfU1Best[2]-1),) or (0,))[0]),) or (0,))[0]
-    U1R1 = (U1A1>=0.75 and (((df_pol[0]['U1Q4']>1 and ((df_pol[0]['U1Q4']-1)/(data.dfU1Best[3]-1),) or (0,))[0]),) or (0,))[0]
-    U1M2 = (df_pol[0]['U1Q5']>1 and ((df_pol[0]['U1Q5']-1)/(data.dfU1Best[4]-1),) or (0,))[0]
-    U1A2 = (U1M2>=0.75 and (((df_pol[0]['U1Q6']>1 and (((df_pol[0]['U1Q6']-1)/(data.dfU1Best[5]-2)>1 and (1,) or ((df_pol[0]['U1Q6']-1)/(data.dfU1Best[5]-2),))[0],) or (0,))[0]),) or (0,))[0]
-    # U1R2 = (U1A2>=0.75 and (((df_pol[0]['U1Q6']>1 and ((df_pol[0]['U1Q6']-1)/(data.dfU1Best[5]-1),) or (0,))[0]),) or (0,))[0]
-    U1S3 = (U1S1>=0.75 and ((((df_pol[0]['U1Q7'])/(data.dfU1Best[0]-2)>=1 and (((df_pol[0]['U1Q7']-1)/(data.dfU1Best[0]-2)<1 and ((df_pol[0]['U1Q7']-1)/(data.dfU1Best[0]-2),) or (1,))[0],) or (0,))[0])))
-    U1M3 = (df_pol[0]['U1Q7']>1 and ((df_pol[0]['U1Q7']-1)/(data.dfU1Best[6]-1),) or (0,))[0]
-    U1S4 = (df_pol[0]['U1Q8']>1 and ((df_pol[0]['U1Q8']-1)/(data.dfU1Best[7]-1),) or (0,))[0]
-    U1M4 = (df_pol[0]['U1Q9']>1 and ((df_pol[0]['U1Q9']-1)/(data.dfU1Best[7]-1),) or (0,))[0]
-    # U1A4 = (U1M4>=0.75 and (((df_pol[0]['U1Q9']>1 and ((df_pol[0]['U1Q9']-1)/(data.dfU1Best[8]-1),) or (0,))[0]),) or (0,))[0]
-    U1M5 = (df_pol[0]['U1Q10']>1 and ((df_pol[0]['U1Q10']-1)/(data.dfU1Best[7]-1),) or (0,))[0]
-    U1M6 = (df_pol[0]['U1Q11']>1 and ((df_pol[0]['U1Q11']-1)/(data.dfU1Best[7]-1),) or (0,))[0]
+    U1S1 = ((df_pol[0]['U1Q1']>=1 and ((df_pol[0]['U1Q1'])/(data.dfU1Best[0]),) or (0,))[0]+(df_pol[0]['U1Q2']>=1 and ((df_pol[0]['U1Q2'])/(data.dfU1Best[0]),) or (0,))[0])/2
+    U1M1 = (U1S1>=0.75 and (((df_pol[0]['U1Q3']>1 and ((df_pol[0]['U1Q3']<3 and ((df_pol[0]['U1Q3'])/(data.dfU1Best[0]-1),) or (1,))[0],) or ((df_pol[0]['U1Q3']/(data.dfU1Best[0]-1)),))[0]),) or (0,))[0]
+    U1A1 = (U1M1>=0.75 and (((df_pol[0]['U1Q3']>1 and ((df_pol[0]['U1Q3'])/(data.dfU1Best[2]),) or ((df_pol[0]['U1Q3']/(data.dfU1Best[2])),))[0]),) or (0,))[0]
+    U1R1 = (U1A1>=0.75 and (((df_pol[0]['U1Q4']>1 and ((df_pol[0]['U1Q4'])/(data.dfU1Best[3]),) or ((df_pol[0]['U1Q4']/(data.dfU1Best[3])),))[0]),) or (0,))[0]
+    U1M2 = (((df_pol[0]['U1Q5']>1 and ((df_pol[0]['U1Q5'])/(data.dfU1Best[4]),) or ((df_pol[0]['U1Q5']/(data.dfU1Best[4])),))[0]),)[0]
+    U1A2 = (U1M2>=0.75 and (((df_pol[0]['U1Q6']>1 and ((df_pol[0]['U1Q6'])/(data.dfU1Best[5]),) or ((df_pol[0]['U1Q6']/(data.dfU1Best[5])),))[0]),)or (0,))[0]
+
+    U1S3 = (((df_pol[0]['U1Q7']>1 and ((df_pol[0]['U1Q7']<3 and ((df_pol[0]['U1Q7'])/(data.dfU1Best[6]-1),) or (1,))[0],) or ((df_pol[0]['U1Q7']/(data.dfU1Best[6]-1)),))[0]),)[0]
+    U1M3 = (U1S3>=0.75 and (((df_pol[0]['U1Q7']>1 and ((df_pol[0]['U1Q7'])/(data.dfU1Best[6]),) or ((df_pol[0]['U1Q7']/(data.dfU1Best[6])),))[0]),) or (0,))[0]
+    
+    U1S4 = (((df_pol[0]['U1Q8']>1 and ((df_pol[0]['U1Q8'])/(data.dfU1Best[7]),) or ((df_pol[0]['U1Q8']/(data.dfU1Best[4])),))[0]),)[0]
+    U1M4 = (((df_pol[0]['U1Q9']>1 and ((df_pol[0]['U1Q9'])/(data.dfU1Best[8]),) or ((df_pol[0]['U1Q9']/(data.dfU1Best[4])),))[0]),)[0]
+    U1M5 = (((df_pol[0]['U1Q10']>1 and ((df_pol[0]['U1Q10'])/(data.dfU1Best[9]),) or ((df_pol[0]['U1Q10']/(data.dfU1Best[4])),))[0]),)[0]
+    U1M6 = (((df_pol[0]['U1Q11']>1 and ((df_pol[0]['U1Q11'])/(data.dfU1Best[10]),) or ((df_pol[0]['U1Q11']/(data.dfU1Best[4])),))[0]),)[0]
 
     #E1
-    E1S1 = ((df_pol[0]['E1Q1'])/(data.dfE1Best[0]-3)<1 and ((df_pol[0]['E1Q1'])/(data.dfE1Best[0]-3),) or (1,))[0]
+    E1S1 = ((df_pol[0]['E1Q1'])/(data.dfE1Best[0]-2)<1 and ((df_pol[0]['E1Q1'])/(data.dfE1Best[0]-3),) or (1,))[0]
     E1A1 = ((df_pol[0]['E1Q1'])/(data.dfE1Best[0]-1)<1 and ((df_pol[0]['E1Q1'])/(data.dfE1Best[0]-1),) or (1,))[0]
     E1T1 = (df_pol[0]['E1Q1'])/(data.dfE1Best[0])
-    E1M2 = (df_pol[0]['E1Q2']>1 and ((df_pol[0]['E1Q2']-1)/(data.dfE1Best[1]-1),) or (0,))[0]
-    E1A2 = (E1M2>=0.75 and (((df_pol[0]['E1Q3']>1 and ((df_pol[0]['E1Q3']-1)/(data.dfE1Best[2]-1),) or (0,))[0]),) or (0,))[0]
-    E1R2 = (E1A2>=0.75 and ((((df_pol[0]['E1Q4']>1 and ((df_pol[0]['E1Q4']-1)/(data.dfE1Best[3]-1),) or (0,))[0]))))
-    E1S3 = (df_pol[0]['E1Q5']>1 and ((df_pol[0]['E1Q5']-1)/(data.dfE1Best[5]-1),) or (0,))[0]
-    E1M3 = (E1S3>=0.75 and ((((df_pol[0]['E1Q6']>1 and ((df_pol[0]['E1Q6']-1)/(data.dfE1Best[6]-1),) or (0,))[0]))))
-
-    E1A3 = (E1M3>=0.75 and ((((df_pol[0]['E1Q7']>1 and ((df_pol[0]['E1Q7']-1)/(data.dfE1Best[8]-1),) or (0,))[0])+((df_pol[0]['E1Q8']>1 and ((df_pol[0]['E1Q8']-1)/(data.dfE1Best[9]-1),) or (0,))[0])+((df_pol[0]['E1Q9']>1 and ((df_pol[0]['E1Q9']-1)/(data.dfE1Best[10]-1),) or (0,))[0]))/3,) or (0,))[0]
-    E1R3 = (E1A3>=0.75 and (((df_pol[0]['E1Q11']>1 and ((df_pol[0]['E1Q11']-1)/(data.dfE1Best[10]-1),) or (0,))[0]),) or (0,))[0]
-    E1A4 = (df_pol[0]['E1Q10']>1 and ((df_pol[0]['E1Q10']-1)/(data.dfE1Best[10]-1),) or (0,))[0]
+    E1M2 = (((df_pol[0]['E1Q2']>1 and ((df_pol[0]['E1Q2'])/(data.dfE1Best[1]),) or ((df_pol[0]['E1Q2']/(data.dfE1Best[1])),))[0]),)[0]
+    E1A2 = (E1M2>=0.75 and df_pol[0]['E1Q3']>1 and ((df_pol[0]['E1Q3'])/(data.dfE1Best[2]),) or ((df_pol[0]['E1Q3']/(data.dfE1Best[2])),))[0]
+    E1R2 = (E1A2>=0.75 and df_pol[0]['E1Q4']>1 and ((df_pol[0]['E1Q4'])/(data.dfE1Best[3]),) or ((df_pol[0]['E1Q4']/(data.dfE1Best[3])),))[0]
+    E1S3 = (((df_pol[0]['E1Q5']>1 and ((df_pol[0]['E1Q5'])/(data.dfE1Best[4]),) or ((df_pol[0]['E1Q5']/(data.dfE1Best[4])),))[0]),)[0]
+    E1M3 = (E1S3>=0.75 and df_pol[0]['E1Q6']>1 and ((df_pol[0]['E1Q6'])/(data.dfE1Best[5]),) or ((df_pol[0]['E1Q6']/(data.dfE1Best[5])),))[0]
+    E1A3 = (E1M3>=0.75 and ((((df_pol[0]['E1Q7']>1 and ((df_pol[0]['E1Q7']-1)/(data.dfE1Best[6]-1),) or (0,))[0])+((df_pol[0]['E1Q8']>1 and ((df_pol[0]['E1Q8']-1)/(data.dfE1Best[7]-1),) or (0,))[0])+((df_pol[0]['E1Q9']>1 and ((df_pol[0]['E1Q9']-1)/(data.dfE1Best[8]-1),) or (0,))[0]))/3,) or (0,))[0]
+    
+    E1R3 = (E1A3>=0.75 and df_pol[0]['E1Q10']>1 and ((df_pol[0]['E1Q10'])/(data.dfE1Best[9]),) or ((df_pol[0]['E1Q10']/(data.dfE1Best[9])),))[0]
+    E1A4 = (((df_pol[0]['E1Q11']>1 and ((df_pol[0]['E1Q11'])/(data.dfE1Best[10]),) or ((df_pol[0]['E1Q11']/(data.dfE1Best[10])),))[0]),)[0]
 
     urbanResults = ({'U1S1': [U1S1], 'U1M1': [U1M1], 'U1A1': [U1A1], 'U1R1': [U1R1], 'U1M2': [U1M2], 'U1A2': [U1A2], 'U1S3': [U1S3], 'U1M3': [U1M3], 'U1S4': [U1S4], 'U1M4': [U1M4], 'U1M5': [U1M5], 'U1M6': [U1M6],
                     'E1S1': [E1S1], 'E1A1': [E1A1], 'E1T1': [E1T1], 'E1M2': [E1M2], 'E1A2': [E1A2], 'E1R2': [E1R2], 'E1S3': [E1S3], 'E1M3': [E1M3], 'E1A3': [E1A3], 'E1R3': [E1R3], 'E1A4': [E1A4]})
