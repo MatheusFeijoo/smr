@@ -290,11 +290,6 @@ with title1:
 with title2:
     st.title('SMR Dashboard - ' + questionnaire)
 
-st.write("test")
-st.write("test")
-st.write("test")
-st.write("test")
-st.write("test")
 ###
 ###    POLICIES COMPLETENESS IN GENERAL - GAUGE CHARTS
 ###
