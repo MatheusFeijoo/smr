@@ -276,19 +276,25 @@ with st.sidebar:
         cooperationResults, cooperationCompleteness = calc_ans.Cooperation(df_pol, data.dfC1Best, data.dfC2Best)
         urbanResults, urbanCompleteness = calc_ans.Urban(df_pol, data.dfU1Best, data.dfE1Best)
     else:
-        # df_pol_previousmonth
-        print(df_pol_previousmonth)
-        leadershipResults_prev, leadershipCompleteness_prev = calc_ans_new.Leadership(df_pol_previousmonth, data.dfL1Best, data.dfL2Best, data.dfL3Best, data.dfL4Best)
-        preparednessResults_prev, preparednessCompleteness_prev = calc_ans_new.Preparedness(df_pol_previousmonth, data.dfP1Best, data.dfP2Best)
-        infraResults_prev, infraCompleteness_prev = calc_ans_new.Infra(df_pol_previousmonth, data.dfI1Best, data.dfI2Best)
-        cooperationResults_prev, cooperationCompleteness_prev = calc_ans_new.Cooperation(df_pol_previousmonth, data.dfC1Best, data.dfC2Best)
-        urbanResults_prev, urbanCompleteness_prev = calc_ans_new.Urban(df_pol_previousmonth, data.dfU1Best, data.dfE1Best)
-        # df_pol_actualmonth
-        leadershipResults, leadershipCompleteness = calc_ans_new.Leadership(df_pol_actualmonth, data.dfL1Best, data.dfL2Best, data.dfL3Best, data.dfL4Best)
-        preparednessResults, preparednessCompleteness = calc_ans_new.Preparedness(df_pol_actualmonth, data.dfP1Best, data.dfP2Best)
-        infraResults, infraCompleteness = calc_ans_new.Infra(df_pol_actualmonth, data.dfI1Best, data.dfI2Best)
-        cooperationResults, cooperationCompleteness = calc_ans_new.Cooperation(df_pol_actualmonth, data.dfC1Best, data.dfC2Best)
-        urbanResults, urbanCompleteness = calc_ans_new.Urban(df_pol_actualmonth, data.dfU1Best, data.dfE1Best)
+        if trigger_new_cities == True:
+            leadershipResults, leadershipCompleteness = calc_ans_new.Leadership(df_pol_actualmonth, data.dfL1Best, data.dfL2Best, data.dfL3Best, data.dfL4Best)
+            preparednessResults, preparednessCompleteness = calc_ans_new.Preparedness(df_pol_actualmonth, data.dfP1Best, data.dfP2Best)
+            infraResults, infraCompleteness = calc_ans_new.Infra(df_pol_actualmonth, data.dfI1Best, data.dfI2Best)
+            cooperationResults, cooperationCompleteness = calc_ans_new.Cooperation(df_pol_actualmonth, data.dfC1Best, data.dfC2Best)
+            urbanResults, urbanCompleteness = calc_ans_new.Urban(df_pol_actualmonth, data.dfU1Best, data.dfE1Best)
+        else:
+            # df_pol_previousmonth
+            leadershipResults_prev, leadershipCompleteness_prev = calc_ans_new.Leadership(df_pol_previousmonth, data.dfL1Best, data.dfL2Best, data.dfL3Best, data.dfL4Best)
+            preparednessResults_prev, preparednessCompleteness_prev = calc_ans_new.Preparedness(df_pol_previousmonth, data.dfP1Best, data.dfP2Best)
+            infraResults_prev, infraCompleteness_prev = calc_ans_new.Infra(df_pol_previousmonth, data.dfI1Best, data.dfI2Best)
+            cooperationResults_prev, cooperationCompleteness_prev = calc_ans_new.Cooperation(df_pol_previousmonth, data.dfC1Best, data.dfC2Best)
+            urbanResults_prev, urbanCompleteness_prev = calc_ans_new.Urban(df_pol_previousmonth, data.dfU1Best, data.dfE1Best)
+            # df_pol_actualmonth
+            leadershipResults, leadershipCompleteness = calc_ans_new.Leadership(df_pol_actualmonth, data.dfL1Best, data.dfL2Best, data.dfL3Best, data.dfL4Best)
+            preparednessResults, preparednessCompleteness = calc_ans_new.Preparedness(df_pol_actualmonth, data.dfP1Best, data.dfP2Best)
+            infraResults, infraCompleteness = calc_ans_new.Infra(df_pol_actualmonth, data.dfI1Best, data.dfI2Best)
+            cooperationResults, cooperationCompleteness = calc_ans_new.Cooperation(df_pol_actualmonth, data.dfC1Best, data.dfC2Best)
+            urbanResults, urbanCompleteness = calc_ans_new.Urban(df_pol_actualmonth, data.dfU1Best, data.dfE1Best)
     
     st.subheader(' ', divider='gray')
     st.subheader("Tool developed by")
