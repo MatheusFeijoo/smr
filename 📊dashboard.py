@@ -223,14 +223,14 @@ with st.sidebar:
     trigger_new_cities = False  
     questionnaire = st.selectbox(
         'Select the option',
-        ('Donostia (16/03/23)',
-         'Donostia',
+        ('Donostia',
          'Sevilla',
-         'Valencia'
+         'Valencia',
+         'Macondo'
          ))
 
     match questionnaire:
-        case "Donostia (16/03/23)":
+        case "Donostia":
             df_pol = df.iloc[0]
         case "Donostia":
             trigger_new_cities = True
@@ -249,6 +249,15 @@ with st.sidebar:
         case "Valencia":
             trigger_new_cities = True
             df_pol = collecting_results("Valencia", df_bigquery)
+            if len(df_pol) > 1:
+                df_pol_actualmonth = (df_pol.iloc[[0]]).astype(int).reset_index(drop=True)
+                df_pol_actualmonth = df_pol_actualmonth.T
+                df_pol_previousmonth = (df_pol.iloc[[1]]).astype(int).reset_index(drop=True)
+                df_pol_previousmonth = df_pol_previousmonth.T
+                trigger = True
+        case "Macondo":
+            trigger_new_cities = True
+            df_pol = collecting_results("Macondo", df_bigquery)
             if len(df_pol) > 1:
                 df_pol_actualmonth = (df_pol.iloc[[0]]).astype(int).reset_index(drop=True)
                 df_pol_actualmonth = df_pol_actualmonth.T
@@ -280,6 +289,12 @@ with st.sidebar:
         infraResults, infraCompleteness = calc_ans_new.Infra(df_pol_actualmonth, data.dfI1Best, data.dfI2Best)
         cooperationResults, cooperationCompleteness = calc_ans_new.Cooperation(df_pol_actualmonth, data.dfC1Best, data.dfC2Best)
         urbanResults, urbanCompleteness = calc_ans_new.Urban(df_pol_actualmonth, data.dfU1Best, data.dfE1Best)
+    
+    st.subheader(' ', divider='gray')
+    st.subheader("Tool developed by")
+    st.image('tecnun.png', width=250)
+    st.image('ministerio_esp.png')
+
 
 ###
 ###    DASHBOARD GENERATION

@@ -228,6 +228,12 @@ def check_null_answers (question, questionsnanswers):
         answer = None
     return answer
 
+with st.sidebar:
+    st.subheader("Tool developed by")
+    st.image('tecnun.png', width=250)
+    st.image('ministerio_esp.png')
+
+
 title1, title2 = st.columns((0.11,1)) 
 with title1:
     st.image('logo_smr.png', width = 120)
@@ -272,7 +278,7 @@ with st.expander("__Log In__", expanded=True):
             name = st.text_input('Name')
             email = st.text_input("E-mail")
             city = st.radio("Select the city to assess",
-                            ["Donostia", "Sevilla", "Valencia"],
+                            ["Donostia", "Sevilla", "Valencia", "Macondo"],
                             horizontal=True,index=None)
         with perinfo2:
             professionalRole = st.text_input("Professional Role")
