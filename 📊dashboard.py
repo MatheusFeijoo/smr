@@ -165,13 +165,13 @@ def returningbest(best, categories, bestname, linecolor):
 def checking_quantity_of_layers (size, best, score, categories, df_radar_previous):
     if size == 2:
             data = [            
-                returningbest(best,categories,'best','#2C3639'),
-                returningbest(score,categories,'score','#D04848')]
+                returningbest(best,categories,'Maximum','#2C3639'),
+                returningbest(score,categories,'Current Score','#ffb400')]
     elif size == 3: 
             data = [            
-                returningbest(best,categories,'best','#2C3639'),
-                returningbest(df_radar_previous,categories,'previous result','#ffb400'),
-                returningbest(score,categories,'score','#D04848'),]
+                returningbest(best,categories,'Maximum','#2C3639'),
+                returningbest(df_radar_previous,categories,'Previous Score','#ffb400'),
+                returningbest(score,categories,'Current Score','#D04848'),]
     return data
 
 def radar_charts (categories, best, score, text, df_radar_previous, trigger_new_cities):
@@ -199,11 +199,11 @@ def line_charts(dimension, valueBestDimension, valueCapturedCompleteness, title,
     fig.add_trace(go.Bar(y=dimension, x=valueBestDimension, name='Best Accomplishment', orientation='h',
                              marker=dict(color='#e2e2e2', line=dict(color='rgba(58, 71, 80, 1.0)', width=1))))
         
-    fig.add_trace(go.Bar(y=dimension, x=valueCapturedCompleteness, name='Captured Completeness', orientation='h',
-                             marker=dict(color='#ffb400', line=dict(color='#4C3A51', width=1))))
+    fig.add_trace(go.Bar(y=dimension, x=valueCapturedCompleteness, name='Current Completeness Level', orientation='h',
+                             marker=dict(color='#ffb400', line=dict(color='#ffb400', width=1))))
 
     if trigger_new_cities == True:
-        fig.add_trace(go.Bar(y=dimension, x=valueCapturedCompleteness_prev, name='Captured Completeness Previous', orientation='h',
+        fig.add_trace(go.Bar(y=dimension, x=valueCapturedCompleteness_prev, name='Previous Completeness Level', orientation='h',
                              marker=dict(color='#D04848', line=dict(color='#D04848', width=1))))
 
     fig.update_layout(title = title, barmode='overlay', title_x=0,
@@ -704,26 +704,26 @@ with tab1:
             else:
                 st.markdown(f'''##### There is no policies to be achieved''', unsafe_allow_html=True)
 
-    ##
-    # Overview of Policies by years
-    ##
-    with st.expander("SMR Completeness", expanded=True):
-        st.subheader("Cities and SMR Completeness - Urban Development & Environmental")
+    # ##
+    # # Overview of Policies by years
+    # ##
+    # with st.expander("SMR Completeness", expanded=True):
+    #     st.subheader("Cities and SMR Completeness - Urban Development & Environmental")
 
-        x = [
-            ["2022", "2022", "2022",
-            "2023", "2023", "2023"],
-            ["Donostia - Synthetic data", "Sevilla - Synthetic data", "Valencia - Synthetic data",
-            "Donostia", "  Sevilla - Synthetic data", "  Valencia - Synthetic data"]
-        ]
-        fig = go.Figure()
-        fig.add_trace(go.Bar(x=x, y=[3, 4, 3, urbanCompleteness[0], 5, 4], name='Starting', marker_color = "#ef476f"))
-        fig.add_trace(go.Bar(x=x, y=[1, 3, 2, urbanCompleteness[1], 4, 3], name='Robust', marker_color = "#ffd166"))
-        fig.add_trace(go.Bar(x=x, y=[0, 2, 1, urbanCompleteness[2], 3, 2], name='Advanced', marker_color = "#06d6a0"))
-        fig.add_trace(go.Bar(x=x, y=[0, 1, 0, urbanCompleteness[3], 2, 1], name='Moderate', marker_color = "#118ab2"))
-        fig.add_trace(go.Bar(x=x, y=[0, 0, 0, urbanCompleteness[4], 1, 0], name='Vertebrate', marker_color = "#073b4c"))
-        fig.update_layout(barmode="relative")
-        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+    #     x = [
+    #         ["2022", "2022", "2022",
+    #         "2023", "2023", "2023"],
+    #         ["Donostia - Synthetic data", "Sevilla - Synthetic data", "Valencia - Synthetic data",
+    #         "Donostia", "  Sevilla - Synthetic data", "  Valencia - Synthetic data"]
+    #     ]
+    #     fig = go.Figure()
+    #     fig.add_trace(go.Bar(x=x, y=[3, 4, 3, urbanCompleteness[0], 5, 4], name='Starting', marker_color = "#ef476f"))
+    #     fig.add_trace(go.Bar(x=x, y=[1, 3, 2, urbanCompleteness[1], 4, 3], name='Robust', marker_color = "#ffd166"))
+    #     fig.add_trace(go.Bar(x=x, y=[0, 2, 1, urbanCompleteness[2], 3, 2], name='Advanced', marker_color = "#06d6a0"))
+    #     fig.add_trace(go.Bar(x=x, y=[0, 1, 0, urbanCompleteness[3], 2, 1], name='Moderate', marker_color = "#118ab2"))
+    #     fig.add_trace(go.Bar(x=x, y=[0, 0, 0, urbanCompleteness[4], 1, 0], name='Vertebrate', marker_color = "#073b4c"))
+    #     fig.update_layout(barmode="relative")
+    #     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 with tab2:
     ##
@@ -940,23 +940,23 @@ with tab2:
             else:
                 st.markdown(f'''##### There is no policies to be achieved''', unsafe_allow_html=True)
 
-    ##
-    # Overview of Policies by years
-    ##
-    with st.expander("SMR Completeness", expanded=True):
-        st.subheader("Cities and SMR Completeness - Urban Development & Environmental")
+    # ##
+    # # Overview of Policies by years
+    # ##
+    # with st.expander("SMR Completeness", expanded=True):
+    #     st.subheader("Cities and SMR Completeness - Urban Development & Environmental")
 
-        x = [
-            ["2022", "2022", "2022",
-            "2023", "2023", "2023"],
-            ["Donostia - Synthetic data", "Sevilla - Synthetic data", "Valencia - Synthetic data",
-            "Donostia", "  Sevilla - Synthetic data", "  Valencia - Synthetic data"]
-        ]
-        fig = go.Figure()
-        fig.add_trace(go.Bar(x=x, y=[3, 4, 3, urbanCompleteness[0], 5, 4], name='Starting', marker_color = "#ef476f"))
-        fig.add_trace(go.Bar(x=x, y=[1, 3, 2, urbanCompleteness[1], 4, 3], name='Robust', marker_color = "#ffd166"))
-        fig.add_trace(go.Bar(x=x, y=[0, 2, 1, urbanCompleteness[2], 3, 2], name='Advanced', marker_color = "#06d6a0"))
-        fig.add_trace(go.Bar(x=x, y=[0, 1, 0, urbanCompleteness[3], 2, 1], name='Moderate', marker_color = "#118ab2"))
-        fig.add_trace(go.Bar(x=x, y=[0, 0, 0, urbanCompleteness[4], 1, 0], name='Vertebrate', marker_color = "#073b4c"))
-        fig.update_layout(barmode="relative")
-        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+    #     x = [
+    #         ["2022", "2022", "2022",
+    #         "2023", "2023", "2023"],
+    #         ["Donostia - Synthetic data", "Sevilla - Synthetic data", "Valencia - Synthetic data",
+    #         "Donostia", "  Sevilla - Synthetic data", "  Valencia - Synthetic data"]
+    #     ]
+    #     fig = go.Figure()
+    #     fig.add_trace(go.Bar(x=x, y=[3, 4, 3, urbanCompleteness[0], 5, 4], name='Starting', marker_color = "#ef476f"))
+    #     fig.add_trace(go.Bar(x=x, y=[1, 3, 2, urbanCompleteness[1], 4, 3], name='Robust', marker_color = "#ffd166"))
+    #     fig.add_trace(go.Bar(x=x, y=[0, 2, 1, urbanCompleteness[2], 3, 2], name='Advanced', marker_color = "#06d6a0"))
+    #     fig.add_trace(go.Bar(x=x, y=[0, 1, 0, urbanCompleteness[3], 2, 1], name='Moderate', marker_color = "#118ab2"))
+    #     fig.add_trace(go.Bar(x=x, y=[0, 0, 0, urbanCompleteness[4], 1, 0], name='Vertebrate', marker_color = "#073b4c"))
+    #     fig.update_layout(barmode="relative")
+    #     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
