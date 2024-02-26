@@ -20,6 +20,7 @@ pd.options.display.float_format = '{:,.0f}'.format
 qnt_answers = len(df.index)
 
 
+
 # Create API client, Google Cloud Big Query
 credentials = service_account.Credentials.from_service_account_info( st.secrets["gcp_service_account"] )
 client = bigquery.Client(credentials=credentials)
@@ -215,6 +216,7 @@ def line_charts(dimension, valueBestDimension, valueCapturedCompleteness, title,
 ###    STREAMLIT LEFT PANNEL
 ###
 # SELECTION CITY AND DIMENSION
+new_data_frame = False
 with st.sidebar:
     # city = st.selectbox(
     #     'Select city',
@@ -256,19 +258,27 @@ with st.sidebar:
                 df_pol_previousmonth = df_pol_previousmonth.T
                 trigger = True
         case "Macondo":
-            trigger_new_cities = True
-            df_pol = collecting_results("Macondo", df_bigquery)
-            if len(df_pol) > 1:
-                df_pol_actualmonth = (df_pol.iloc[[0]]).astype(int).reset_index(drop=True)
+            trigger_new_cities = False
+            trigger = True
+            df_pol_actualmonth = collecting_results("Macondo", df_bigquery)
+            df_pol_actualmonth = df_pol_actualmonth.drop(index = [0])
+            df_pol = df_pol_actualmonth
+            if len(df_pol_actualmonth) > 1:
+                df_pol_actualmonth = (df_pol_actualmonth.iloc[[0]]).astype(int).reset_index(drop=True)
                 df_pol_actualmonth = df_pol_actualmonth.T
                 df_pol_previousmonth = (df_pol.iloc[[1]]).astype(int).reset_index(drop=True)
+                
                 df_pol_previousmonth = df_pol_previousmonth.T
                 trigger = True
+                trigger_new_cities = True
+                
+            else:
+                new_data_frame = True
+                df_pol_actualmonth = (df_pol_actualmonth.iloc[[0]]).astype(int).reset_index(drop=True)
+                df_pol_actualmonth = df_pol_actualmonth.T
         case _:
             print("error")
     
-    
-
     if trigger == False:
         leadershipResults, leadershipCompleteness = calc_ans.Leadership(df_pol, data.dfL1Best, data.dfL2Best, data.dfL3Best, data.dfL4Best)
         preparednessResults, preparednessCompleteness = calc_ans.Preparedness(df_pol, data.dfP1Best, data.dfP2Best)
@@ -276,7 +286,7 @@ with st.sidebar:
         cooperationResults, cooperationCompleteness = calc_ans.Cooperation(df_pol, data.dfC1Best, data.dfC2Best)
         urbanResults, urbanCompleteness = calc_ans.Urban(df_pol, data.dfU1Best, data.dfE1Best)
     else:
-        if trigger_new_cities == True:
+        if new_data_frame == True:
             leadershipResults, leadershipCompleteness = calc_ans_new.Leadership(df_pol_actualmonth, data.dfL1Best, data.dfL2Best, data.dfL3Best, data.dfL4Best)
             preparednessResults, preparednessCompleteness = calc_ans_new.Preparedness(df_pol_actualmonth, data.dfP1Best, data.dfP2Best)
             infraResults, infraCompleteness = calc_ans_new.Infra(df_pol_actualmonth, data.dfI1Best, data.dfI2Best)
@@ -314,7 +324,7 @@ with title2:
 ###
 ###    POLICIES COMPLETENESS IN GENERAL - GAUGE CHARTS
 ###
-st.subheader("SMR Completeness")
+st.subheader("SMR Maturity Stage Completeness")
 sec5_col1, sec5_col2, sec5_col3, sec5_col4, sec5_col5 = st.columns([1,1,1,1,1])
 
 #GAUGE 1 - Leadership & Governance
@@ -452,7 +462,6 @@ with tab1:
             score_L1, score_L2, score_L3, score_L4 = transform_radar_leadership(df_pol_actualmonth)
             df_radar_previous_L1, df_radar_previous_L2, df_radar_previous_L3, df_radar_previous_L4 = transform_radar_leadership(df_pol_previousmonth)
             score = 0
-        
         else:
             df_radar = df_pol
             df_radar_previous_L1= df_radar_previous_L2= df_radar_previous_L3= df_radar_previous_L4 = 0
@@ -547,6 +556,7 @@ with tab1:
                                         leadershipResults['L3R2'][0],
                                         leadershipResults['L3T1'][0], leadershipResults['L3T2'][0]]
             title = 'All Policies - L3'
+            
             fig3 = line_charts(dimension, valueBestDimension, valueCapturedCompleteness, title, valueCapturedCompleteness_prevL3, trigger_new_cities)
             sec4_col3.plotly_chart(fig3, use_container_width=True)
 

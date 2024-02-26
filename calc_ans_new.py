@@ -20,7 +20,7 @@ def Leadership(df_pol, dfL1Best, dfL2Best, dfL3Best, dfL4Best):
     L2R1 = (((((df_pol[0]['L2Q1'])/(data.dfL2Best[0]-3)>=1 and (((df_pol[0]['L2Q1']-1)/(data.dfL2Best[0]-2)>1 and (1,) or ((df_pol[0]['L2Q1'])/(data.dfL2Best[0]-1),))[0],) or (0,))[0])+(((df_pol[0]['L2Q2'])/(data.dfL2Best[1]-3)>=1 and (((df_pol[0]['L2Q2']-1)/(data.dfL2Best[1]-2)>1 and (1,) or ((df_pol[0]['L2Q2'])/(data.dfL2Best[1]-1),))[0],) or (0,))[0]))/2)
     L2T1 = (((((df_pol[0]['L2Q1'])/(data.dfL2Best[0]-3)>=1 and (((df_pol[0]['L2Q1']-1)/(data.dfL2Best[0]-1)>1 and (1,) or ((df_pol[0]['L2Q1'])/(data.dfL2Best[0]),))[0],) or (0,))[0])+(((df_pol[0]['L2Q2'])/(data.dfL2Best[1]-3)>=1 and (((df_pol[0]['L2Q2']-1)/(data.dfL2Best[1]-1)>1 and (1,) or ((df_pol[0]['L2Q2'])/(data.dfL2Best[1]),))[0],) or (0,))[0]))/2)
     #L3
-    L3S1 = (((df_pol[0]['L3Q1'])/(data.dfL3Best[0])>=1 and (1,) or (0,))[0])
+    L3S1 = ((df_pol[0]['L3Q1'])/(df_pol[0]['L3Q1']-1)>=1 and (1,) or (0,))[0]
     L3M1 = (((df_pol[0]['L3Q1'])/(data.dfL3Best[0]-1)>=1 and (((df_pol[0]['L3Q1'])/(data.dfL3Best[0])),) or (0,))[0])
     L3T1 = ((L3M1>=0.75 and ((df_pol[0]['L3Q1']>=3 and (((df_pol[0]['L3Q3']>1 and (((df_pol[0]['L3Q3'])/(data.dfL3Best[2])),) or (0,))[0]),) or (0,))[0],) or (0,))[0])
     L3M2 = ((df_pol[0]['L3Q2']>1 and ((((df_pol[0]['L3Q2'])/(data.dfL3Best[1]-1)>=1 and (1,) or ((df_pol[0]['L3Q2'])/(data.dfL3Best[1]),))[0]),) or (0,))[0])
