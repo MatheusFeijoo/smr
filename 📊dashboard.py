@@ -756,44 +756,64 @@ with tab2:
         else:
             df_radar = df_pol
             df_radar_previous_U1 = df_radar_previous_E1 = 0
-            score_U1 = [df_radar['U1Q1'].mean(), df_radar['U1Q2'].mean(), df_radar['U1Q3'].mean(), 
-                        df_radar['U1Q4'].mean(), df_radar['U1Q5'].mean(), df_radar['U1Q6'].mean(), 
-                        df_radar['U1Q7'].mean(), df_radar['U1Q8'].mean(), df_radar['U1Q9'].mean(),
-                        df_radar['U1Q10'].mean(), df_radar['U1Q11'].mean()]
-            score_E1 = [df_radar['E1Q1'].mean(), df_radar['E1Q2'].mean(), df_radar['E1Q3'].mean(),
-                         df_radar['E1Q4'].mean(), df_radar['E1Q5'].mean(), df_radar['E1Q6'].mean(), 
-                         ((df_radar['E1Q7'].mean() + df_radar['E1Q8'].mean() + df_radar['E1Q9'].mean() + df_radar['E1Q10'].mean())/4),
-                         df_radar['E1Q11'].mean()]
-        
+            # OLD VERSION CONSIDERING THE SECOND LEVEL OF ELEMENTS
+            # score_U1 = [((df_radar['U1Q1'].mean() + df_radar['U1Q2'].mean())/2), df_radar['U1Q3'].mean(), 
+            #             df_radar['U1Q4'].mean(), df_radar['U1Q5'].mean(), df_radar['U1Q6'].mean(), 
+            #             df_radar['U1Q7'].mean(), df_radar['U1Q8'].mean(), df_radar['U1Q9'].mean(),
+            #             df_radar['U1Q10'].mean(), df_radar['U1Q11'].mean()]
+            # score_E1 = [df_radar['E1Q1'].mean(), df_radar['E1Q2'].mean(), df_radar['E1Q3'].mean(),
+            #              df_radar['E1Q4'].mean(), df_radar['E1Q5'].mean(), df_radar['E1Q6'].mean(), 
+            #              ((df_radar['E1Q7'].mean() + df_radar['E1Q8'].mean() + df_radar['E1Q9'].mean() + df_radar['E1Q10'].mean())/4),
+            #              df_radar['E1Q11'].mean()]
+            score_U1 = [((df_radar['U1Q1'].mean() + df_radar['U1Q2'].mean() + df_radar['U1Q3'].mean() + df_radar['U1Q4'].mean())/4), #Climate change adaptation
+                        ((df_radar['U1Q5'].mean() + df_radar['U1Q6'].mean())/2), #Natural based solutions
+                        df_radar['U1Q7'].mean(), #Climate information to support decision making
+                        ((df_radar['U1Q8'].mean() + df_radar['U1Q9'].mean() + df_radar['U1Q10'].mean())/3), #Regulations and guidelines for urban planning
+                        df_radar['U1Q11'].mean()] #Sustainability in urban planning
+                        
+            score_E1 = [df_radar['E1Q1'].mean(), #Development of an ecosystem services assessment
+                        df_radar['E1Q2'].mean(), #Awareness
+                        ((df_radar['E1Q3'].mean() + df_radar['E1Q4'].mean())/2), #Coverage of ecosystem restoration and protection measures
+                        ((df_radar['E1Q5'].mean() + df_radar['E1Q6'].mean() + df_radar['E1Q7'].mean() + df_radar['E1Q8'].mean() + df_radar['E1Q9'].mean() + df_radar['E1Q10'].mean() + df_radar['E1Q11'].mean())/6)] #Climate change mitigation
+
         st.subheader('Questions Performance Analysis - Urban Development & Environmental')
         col1, col2 = st.columns([1,1])
         # RADAR U1
-        categories = ['Adaptation Measures in Urban Planning', 
-                      'Adaptation Measures in Urban Development',
-                      'Plans to Implement CC Adaptation Measures', 
-                      'Monitoring and Evaluation of the CC Adaptation Measures',
-                      'NBSs Identification',
-                      'NBSs Implementation',
-                      'Climate Information to Support Decision Making',
-                      'Building Regulations and Standards',
-                      'Guideline for Sustainable and Resilient Urban Planning',
-                      'Sustainable Design and Risk Reduction Measures in Buildings',
-                      'Sustainable Design and Development of Urban Mobility and Public Services',]
-        best = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+        # categories = ['Identify the climate change asaptation measures', #U1Q1
+        #               'Establish plans to favor the implementation of climate change adaptation measures', #U1Q2
+        #               'Monitoring and Evaluation of the CC Adaptation Measures', #U1Q3
+        #               'Identifying potential NBS for improving urban resilience', #U1Q4
+        #               'Implementation of NBS for improving urban resilience', #U1Q5
+        #               'Climate Information to Support Decision Making', #U1Q6
+        #               'Building Regulations and Standards', #U1Q7
+        #               'Guideline for Sustainable and Resilient Urban Planning', #U1Q8
+        #               'Sustainable Design and Risk Reduction Measures in Buildings', #U1Q9
+        #               'Sustainable Design and Development of Urban Mobility and Public Services',] #U1Q10
+        categories =['Climate change adaptation',
+                     'Natural based solutions',
+                     'Climate information to support decision making',
+                     'Regulations and guidelines for urban planning', 
+                     'Sustainability in urban planning']
+        best = [4, 4, 4, 4, 4]
         text='Urban Development & Environmental (U1)'
         fig1 = radar_charts(categories, best, score_U1, text, df_radar_previous_U1, trigger_new_cities)
         col1.plotly_chart(fig1, use_container_width=True)
     
         # RADAR E1
-        categories = ['Assessment of the ecosystem and biodiversity', 
-                      'Awareness', 
-                      'Promotion and establishment of transboundary agreements and collaborations',
-                      'Protection and restoration of important ecosystems',
-                      'Definition of Targets for GHG reduction till 2050',
-                      'Establish plans to favor the implementation of climate change mitigation actions',
-                      'Climate change mitigation',
-                      'Monitoring and evaluation of the climate change mitigation measures']
-        best = [4, 4, 4, 4, 4, 4, 4, 4]
+        # OLD VERSION CONSIDERING THE SECOND LEVEL OF ELEMENTS
+        # categories = ['Assessment of the ecosystem and biodiversity', #E1Q1
+        #               'Awareness', #E1Q2
+        #               'Promotion and establishment of transboundary agreements and collaborations', #E1Q3
+        #               'Protection and restoration of important ecosystems', #E1Q4
+        #               'Definition of Targets for GHG reduction till 2050', #E1Q5
+        #               'Establish plans to favor the implementation of climate change mitigation actions', #E1Q6
+        #               'Climate change mitigation', #E1Q7/E1Q8/E1Q9/E1Q10
+        #               'Monitoring and evaluation of the climate change mitigation measures'] #E1Q11
+        categories =['Development of an ecosystem services assessment',
+                     'Awareness',
+                     'Coverage of ecosystem restoration and protection measures',
+                     'Climate change mitigation']
+        best = [4, 4, 4, 4]
         text='Urban Development & Environmental (E1)'
         fig2 = radar_charts(categories, best, score_E1, text, df_radar_previous_E1, trigger_new_cities)
         col2.plotly_chart(fig2, use_container_width=True)
